@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import connectDB from './config/db.js';
+import { apiLimiter, authLimiter } from './middleware/rateLimiter.js';
 
 // Import routes
 import authRoutes from './routes/auth.js';
@@ -32,7 +33,12 @@ app.use(cors({
   credentials: true,
 }));
 
-// API Routes
+// Apply rate limiting to all API routes
+app.use('/api', apiLimiter);
+
+// API Routes with specific rate limiters for auth
+app.use('/api/auth/signup', authLimiter);
+app.use('/api/auth/login', authLimiter);
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/expenses', expenseRoutes);
