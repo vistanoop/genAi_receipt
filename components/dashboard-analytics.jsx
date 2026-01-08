@@ -40,7 +40,7 @@ export default function DashboardAnalytics() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="col-span-2">
           <div className="glassmorphism rounded-2xl p-6">
-            <h3 className="text-lg font-semibold mb-4">Cash Flow Projection (30 days)</h3>
+            <h3 className="text-lg font-semibold mb-4">Spend Ahead Projection (30 days)</h3>
             <div style={{ width: "100%", height: 300 }}>
               <ResponsiveContainer>
                 <LineChart data={lineData}>

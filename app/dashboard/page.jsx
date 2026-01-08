@@ -7,7 +7,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import FinancialHealthSnapshot from '@/components/financial-health-snapshot';
-import CashFlowTimeline from '@/components/cash-flow-timeline';
+import SpendAheadTimeline from '@/components/spend-ahead-timeline';
 
 export default function DashboardPage() {
   return (
@@ -31,9 +31,9 @@ export default function DashboardPage() {
         <FinancialHealthSnapshot />
       </section>
 
-      {/* Cash Flow Timeline */}
+      {/* Spend Ahead Timeline */}
       <section>
-        <CashFlowTimeline />
+        <SpendAheadTimeline />
       </section>
     </div>
   );
