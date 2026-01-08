@@ -82,10 +82,6 @@ export default function DashboardPage() {
     date: new Date().toISOString().split('T')[0],
   });
 
-  useEffect(() => {
-    fetchExpenses();
-  }, []);
-
   const fetchExpenses = async () => {
     try {
       const response = await fetch('/api/expenses');
@@ -108,6 +104,11 @@ export default function DashboardPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchExpenses();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleLogout = async () => {
     try {
