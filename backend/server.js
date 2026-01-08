@@ -1,76 +1,75 @@
-// Load environment variables FIRST before any other imports
-import dotenv from 'dotenv';
-dotenv.config();
-
 import express from 'express';
-import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import connectDB from './config/db.js';
-import { apiLimiter, authLimiter } from './middleware/rateLimiter.js';
+import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
+import connectDB from './config/database.js';
+import { errorHandler } from './middleware/errorHandler.js';
 
 // Import routes
-import authRoutes from './routes/auth.js';
-import userRoutes from './routes/user.js';
-import expenseRoutes from './routes/expenses.js';
-import incomeRoutes from './routes/income.js';
-import fixedExpenseRoutes from './routes/fixedExpenses.js';
-import goalRoutes from './routes/goals.js';
+import authRoutes from './routes/authRoutes.js';
+import expenseRoutes from './routes/expenseRoutes.js';
+import googleAuthRoutes from './routes/googleAuthRoutes.js';
+
+// Load environment variables
+dotenv.config({ path: './.env' });
+
+// Verify required environment variables
+if (!process.env.MONGODB_URI) {
+  console.error('❌ Error: MONGODB_URI is not set in .env file');
+  console.error('Please create a .env file in the backend directory with MONGODB_URI');
+  process.exit(1);
+}
+
+if (!process.env.JWT_SECRET) {
+  console.warn('⚠️  Warning: JWT_SECRET is not set. Using default (not secure for production!)');
+}
+
+// Connect to database
+connectDB();
 
 // Initialize Express app
 const app = express();
 
-// Connect to MongoDB
-connectDB();
+// Middleware - CORS configuration
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      process.env.FRONTEND_URL,
+      'http://localhost:3000',
+      'http://localhost:3001',
+    ].filter(Boolean); // Remove undefined values
+    
+    if (allowedOrigins.includes(origin) || process.env.NODE_ENV === 'development') {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
 
-// Middleware
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// CORS configuration
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  credentials: true,
-}));
-
-// Apply rate limiting to all API routes
-app.use('/api', apiLimiter);
-
-// API Routes with specific rate limiters for auth
-app.use('/api/auth/signup', authLimiter);
-app.use('/api/auth/login', authLimiter);
-app.use('/api/auth', authRoutes);
-app.use('/api/user', userRoutes);
-app.use('/api/expenses', expenseRoutes);
-app.use('/api/income', incomeRoutes);
-app.use('/api/fixed-expenses', fixedExpenseRoutes);
-app.use('/api/goals', goalRoutes);
-
-// Root endpoint
-app.get('/', (req, res) => {
+// Health check route
+app.get('/api/health', (req, res) => {
   res.json({
     success: true,
-    message: 'GenAI Receipt Backend API',
-    version: '1.0.0',
-    endpoints: {
-      auth: '/api/auth',
-      user: '/api/user',
-      expenses: '/api/expenses',
-      income: '/api/income',
-      fixedExpenses: '/api/fixed-expenses',
-      goals: '/api/goals',
-    },
-  });
-});
-
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: 'Server is running',
+    message: 'Backend API is running',
     timestamp: new Date().toISOString(),
   });
 });
+
+// API Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/auth', googleAuthRoutes);
+app.use('/api/expenses', expenseRoutes);
 
 // 404 handler
 app.use((req, res) => {
@@ -80,18 +79,14 @@ app.use((req, res) => {
   });
 });
 
-// Global error handler
-app.use((err, req, res, next) => {
-  console.error('Global error:', err);
-  res.status(err.status || 500).json({
-    success: false,
-    error: err.message || 'Internal server error',
-  });
-});
+// Error handler (must be last)
+app.use(errorHandler);
 
 // Start server
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📡 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🌐 API URL: http://localhost:${PORT}/api`);
 });
