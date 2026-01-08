@@ -12,7 +12,7 @@
 const http = require('http');
 
 const options = {
-  host: 'localhost',
+  host: '127.0.0.1',
   port: process.env.PORT || 5000,
   path: '/api/health',
   timeout: 3000,
@@ -31,8 +31,14 @@ healthCheck.on('error', () => {
   process.exit(1);
 });
 
-healthCheck.on('timeout', () => {
+// Implement proper timeout
+const timeoutId = setTimeout(() => {
+  healthCheck.destroy();
   process.exit(1);
+}, 3000);
+
+healthCheck.on('response', () => {
+  clearTimeout(timeoutId);
 });
 
 healthCheck.end();
