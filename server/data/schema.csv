@@ -1,0 +1,16 @@
+column_name,type,category,description
+land_size_acres,float,capacity,Total cultivable land size (repayment capacity indicator)
+experience_years,int,capacity,Farming experience in years (operational capacity)
+repayment_history,category,behavior,Past loan repayment behavior
+loan_amount,int,exposure,Requested loan amount
+loan_amount_per_acre,float,exposure,Loan amount normalized by land size (loan stress indicator)
+loan_to_experience_ratio,float,exposure,Loan amount normalized by farming experience (capability stress)
+crop_type,category,context,Primary crop cultivated (user input)
+crop_season_risk,category,context,Risk derived from crop-season suitability
+irrigation,category,capacity,Irrigation availability
+soil_quality,category,capacity,Soil productivity level
+yield_variance,float,stability,Seasonal yield variability
+rainfall_deviation,float,stability,Deviation from normal rainfall
+market_volatility,category,stability,Crop price volatility
+loan_purpose,category,behavior,Purpose of loan usage
+default_risk,int,target,1=borrower defaulted,0=borrower did not default
