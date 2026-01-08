@@ -20,11 +20,30 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate login (replace with actual authentication)
-    setTimeout(() => {
-      toast.success("Login successful!");
-      router.push("/dashboard");
-    }, 1000);
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        toast.error(data.error || 'Login failed');
+        setLoading(false);
+        return;
+      }
+
+      toast.success(data.message || 'Login successful!');
+      router.push('/dashboard');
+    } catch (error) {
+      console.error('Login error:', error);
+      toast.error('An error occurred. Please try again.');
+      setLoading(false);
+    }
   };
 
   return (
