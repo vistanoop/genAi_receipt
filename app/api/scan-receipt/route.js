@@ -39,7 +39,7 @@ export async function POST(request) {
         "category": "string"
       }
 
-      If its not a receipt, return an empty object
+      If it's not a receipt, return an empty object
     `;
 
     const result = await model.generateContent([
