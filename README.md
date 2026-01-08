@@ -1251,4 +1251,4 @@ ISC License - See LICENSE file for details
 
 **Built with ❤️ using Next.js, React, Express, MongoDB, and Google Gemini AI**
 
-*Last Updated: January 2025*
+*Last Updated: January 2026*
