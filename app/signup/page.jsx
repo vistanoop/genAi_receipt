@@ -15,6 +15,8 @@ export default function SignupPage() {
     email: "",
     password: "",
     confirmPassword: "",
+    monthlyIncome: "",
+    currency: "INR",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -48,6 +50,8 @@ export default function SignupPage() {
           name: formData.name,
           email: formData.email,
           password: formData.password,
+          monthlyIncome: parseFloat(formData.monthlyIncome) || 0,
+          currency: formData.currency,
         }),
       });
 
@@ -60,7 +64,7 @@ export default function SignupPage() {
       }
 
       toast.success(data.message || 'Account created successfully!');
-      router.push('/dashboard');
+      router.push('/onboarding'); // Redirect to onboarding instead of dashboard
     } catch (error) {
       console.error('Signup error:', error);
       toast.error('An error occurred. Please try again.');
@@ -167,6 +171,38 @@ export default function SignupPage() {
                 required
                 className="h-12 bg-background/50 transition-all duration-200 focus:bg-background"
               />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2">Monthly Income (Optional)</label>
+              <Input
+                type="number"
+                name="monthlyIncome"
+                placeholder="50000"
+                value={formData.monthlyIncome}
+                onChange={handleChange}
+                min="0"
+                step="100"
+                className="h-12 bg-background/50 transition-all duration-200 focus:bg-background"
+              />
+              <p className="text-xs text-muted-foreground mt-1">You can update this later</p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2">Preferred Currency</label>
+              <select
+                name="currency"
+                value={formData.currency}
+                onChange={handleChange}
+                className="w-full h-12 px-3 rounded-md border border-input bg-background/50 transition-all duration-200 focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring"
+              >
+                <option value="INR">INR (₹)</option>
+                <option value="USD">USD ($)</option>
+                <option value="EUR">EUR (€)</option>
+                <option value="GBP">GBP (£)</option>
+                <option value="AUD">AUD (A$)</option>
+                <option value="CAD">CAD (C$)</option>
+              </select>
             </div>
 
             <div>

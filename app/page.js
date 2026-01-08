@@ -8,9 +8,6 @@ import {
   Sparkles, 
   Shield, 
   Zap,
-  DollarSign,
-  Receipt,
-  PieChart
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -86,9 +83,9 @@ export default function HomePage() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight"
             >
-              Manage Your Expenses with
+              Predict Your Future Cash Flow
               <br />
-              <span className="gradient-title">AI-Powered Intelligence</span>
+              <span className="gradient-title">Before Month-End Struggle</span>
             </motion.h1>
 
             {/* Subtext */}
@@ -98,8 +95,8 @@ export default function HomePage() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto"
             >
-              Track your spending, scan receipts with AI, and get insights into your financial health. 
-              Make smarter financial decisions with real-time analytics and personalized recommendations.
+              Stop guessing where your money goes. Simulate financial decisions, predict month-end balance, 
+              and understand how today's spending affects your savings goals. Your AI-powered financial copilot.
             </motion.p>
 
             {/* CTA Buttons */}
@@ -142,11 +139,11 @@ export default function HomePage() {
               </div>
               <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-background/60 backdrop-blur-sm border border-border">
                 <Zap className="w-4 h-4 text-blue-500" />
-                <span className="text-sm font-medium">Real-time Predictions</span>
+                <span className="text-sm font-medium">Future Cash-Flow Visibility</span>
               </div>
               <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-background/60 backdrop-blur-sm border border-border">
                 <TrendingUp className="w-4 h-4 text-purple-500" />
-                <span className="text-sm font-medium">AI-Powered Insights</span>
+                <span className="text-sm font-medium">Financial Decision Simulator</span>
               </div>
             </motion.div>
           </div>
@@ -163,34 +160,34 @@ export default function HomePage() {
             className="text-center mb-16"
           >
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Everything You Need to <span className="gradient-title">Track Your Finances</span>
+              Why <span className="gradient-title">Month-End Struggle</span> Happens
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Powerful features to help you understand and manage your money better
+              You make spending decisions based on current balance, not understanding how it affects month-end or savings goals
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
-                title: "AI Receipt Scanner",
+                title: "Cash-Flow Forecast",
                 description:
-                  "Scan receipts instantly with AI. Automatically extract amounts, categories, and dates with high accuracy.",
-                icon: Receipt,
+                  "Predict end-of-month balance and see 3-month cash flow. Identify safe, risk, and danger zones before they happen.",
+                icon: TrendingUp,
                 gradient: "from-teal-500 to-blue-500",
               },
               {
-                title: "Expense Tracking",
+                title: "Simulation Lab",
                 description:
-                  "Track all your expenses in one place. Add, edit, and delete expenses easily with a clean interface.",
-                icon: DollarSign,
+                  "Ask 'What if I buy this?' and see the real impact on your month-end balance, savings goals, and financial risk.",
+                icon: Sparkles,
                 gradient: "from-blue-500 to-purple-500",
               },
               {
-                title: "Visual Analytics",
+                title: "AI Financial Copilot",
                 description:
-                  "See your spending patterns with beautiful charts and graphs. Understand where your money goes.",
-                icon: PieChart,
+                  "Get natural language explanations: Why you run out of money, what to change, and if you can afford that purchase.",
+                icon: Shield,
                 gradient: "from-purple-500 to-pink-500",
               },
             ].map((item, index) => (
