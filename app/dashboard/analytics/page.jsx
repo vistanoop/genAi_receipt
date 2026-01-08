@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import CashFlowTimeline from '@/components/cash-flow-timeline';
+import SpendAheadTimeline from '@/components/spend-ahead-timeline';
 import EnhancedAnalytics from '@/components/enhanced-analytics';
 
 export default function AnalyticsPage() {
@@ -20,7 +20,7 @@ export default function AnalyticsPage() {
           Financial <span className="gradient-title">Analytics</span>
         </h1>
         <p className="text-lg text-muted-foreground max-w-3xl">
-          Deep dive into your cash flow patterns, spending trends, and financial insights.
+          Deep dive into your spending patterns, trends, and financial insights.
         </p>
       </motion.div>
 
@@ -31,7 +31,7 @@ export default function AnalyticsPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <CashFlowTimeline />
+        <SpendAheadTimeline />
       </motion.div>
     </div>
   );

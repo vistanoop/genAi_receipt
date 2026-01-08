@@ -164,11 +164,11 @@ export default function PlannerPage() {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-teal-500/10 to-blue-500/10 border border-teal-500/20 mb-6">
             <Target className="w-4 h-4 text-teal-500" />
             <span className="text-sm font-medium text-foreground/80">
-              Let's Plan Your Financial Future
+              Let&apos;s Plan Your Financial Future
             </span>
           </div>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-4">
-            Welcome to <span className="gradient-title">FlowCast</span>
+            Welcome to <span className="gradient-title">SpendAhead</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Tell us about your finances so we can help you predict and plan your spending

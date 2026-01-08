@@ -1,5 +1,5 @@
 /**
- * Cash Flow Timeline
+ * Spend Ahead Timeline
  * Visual day-by-day projection of money flow with risk zones
  */
 
@@ -22,7 +22,7 @@ import {
 } from 'recharts';
 import { TrendingUp, TrendingDown, AlertTriangle } from 'lucide-react';
 
-export default function CashFlowTimeline() {
+export default function SpendAheadTimeline() {
   const { financialState, projections, whatIfProjections, whatIfScenario } = useFinancial();
 
   const displayProjections = whatIfScenario ? whatIfProjections : projections;
@@ -92,7 +92,7 @@ export default function CashFlowTimeline() {
         className="flex flex-col md:flex-row md:items-center md:justify-between gap-4"
       >
         <div>
-          <h2 className="text-2xl font-bold mb-2">Cash Flow Timeline</h2>
+          <h2 className="text-2xl font-bold mb-2">Spend Ahead Timeline</h2>
           <p className="text-muted-foreground">
             Day-by-day projection of your balance
             {whatIfScenario && (
