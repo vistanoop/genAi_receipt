@@ -25,6 +25,19 @@ const UserSchema = new mongoose.Schema(
       minlength: 8,
       select: false, // Don't return password by default
     },
+    monthlyIncome: {
+      type: Number,
+      default: 0,
+    },
+    currency: {
+      type: String,
+      default: 'INR',
+      enum: ['INR', 'USD', 'EUR', 'GBP', 'AUD', 'CAD'],
+    },
+    hasCompletedOnboarding: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

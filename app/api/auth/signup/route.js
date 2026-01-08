@@ -7,7 +7,7 @@ export async function POST(request) {
   try {
     await connectDB();
 
-    const { name, email, password } = await request.json();
+    const { name, email, password, monthlyIncome, currency } = await request.json();
 
     // Validate input
     if (!name || !email || !password) {
@@ -51,6 +51,9 @@ export async function POST(request) {
       name,
       email,
       password,
+      monthlyIncome: monthlyIncome || 0,
+      currency: currency || 'INR',
+      hasCompletedOnboarding: false,
     });
 
     // Generate JWT token
