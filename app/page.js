@@ -10,7 +10,10 @@ import {
   Zap,
   Target,
   LineChart,
-  Brain
+  Brain,
+  Receipt,
+  DollarSign,
+  PieChart
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -359,6 +362,9 @@ export default function HomePage() {
                 description:
                   "Use Simulation Lab to test spending decisions. Get AI explanations for every recommendation.",
                 icon: Sparkles,
+                gradient: "from-purple-500 to-pink-500",
+              },
+              {
                 title: "AI Receipt Scanner",
                 description:
                   "Scan receipts instantly with AI. Automatically extract amounts, categories, and dates with high accuracy.",
