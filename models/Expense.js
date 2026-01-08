@@ -50,7 +50,13 @@ const ExpenseSchema = new mongoose.Schema(
   }
 );
 
-// Index for faster queries
+// Compound index for faster queries by user and date (descending)
 ExpenseSchema.index({ userId: 1, date: -1 });
+
+// Compound index for category-based queries
+ExpenseSchema.index({ userId: 1, category: 1, date: -1 });
+
+// Index for amount range queries (for analytics)
+ExpenseSchema.index({ userId: 1, amount: -1 });
 
 export default mongoose.models.Expense || mongoose.model('Expense', ExpenseSchema);

@@ -53,7 +53,16 @@ const SavingsGoalSchema = new mongoose.Schema(
   }
 );
 
-// Index for faster queries
-SavingsGoalSchema.index({ userId: 1, priority: -1 });
+// Compound index for faster queries by user and priority
+SavingsGoalSchema.index({ userId: 1, priority: -1, createdAt: -1 });
+
+// Index for status-based queries
+SavingsGoalSchema.index({ userId: 1, status: 1 });
+
+// Index for target date queries (for upcoming goals)
+SavingsGoalSchema.index({ userId: 1, targetDate: 1, status: 1 });
+
+// Index for type-based queries
+SavingsGoalSchema.index({ userId: 1, type: 1 });
 
 export default mongoose.models.SavingsGoal || mongoose.model('SavingsGoal', SavingsGoalSchema);
