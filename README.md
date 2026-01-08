@@ -48,18 +48,19 @@ Traditional expense trackers show you the past. SpendAhead helps you shape your 
 
 1. [Key Features](#-key-features)
 2. [Quick Start](#-quick-start)
-3. [Technology Stack](#-technology-stack)
-4. [System Architecture](#-system-architecture)
-5. [Database Schema](#-database-schema)
-6. [Authentication Flow](#-authentication-flow)
-7. [API Documentation](#-api-documentation)
-8. [Frontend Structure](#-frontend-structure)
-9. [Setup & Installation](#-setup--installation)
-10. [Development Workflow](#-development-workflow)
-11. [Deployment Guide](#-deployment-guide)
-12. [Feature Descriptions](#-feature-descriptions)
-13. [Security Considerations](#-security-considerations)
-14. [Troubleshooting](#-troubleshooting)
+3. [Docker Setup](#-docker-setup)
+4. [Technology Stack](#-technology-stack)
+5. [System Architecture](#-system-architecture)
+6. [Database Schema](#-database-schema)
+7. [Authentication Flow](#-authentication-flow)
+8. [API Documentation](#-api-documentation)
+9. [Frontend Structure](#-frontend-structure)
+10. [Setup & Installation](#-setup--installation)
+11. [Development Workflow](#-development-workflow)
+12. [Deployment Guide](#-deployment-guide)
+13. [Feature Descriptions](#-feature-descriptions)
+14. [Security Considerations](#-security-considerations)
+15. [Troubleshooting](#-troubleshooting)
 
 ---
 
@@ -67,7 +68,37 @@ Traditional expense trackers show you the past. SpendAhead helps you shape your 
 
 Get SpendAhead running on your machine in minutes!
 
-### Prerequisites
+### 🐳 Option 1: Using Docker (Recommended)
+
+**The easiest way to get started!** No need to install Node.js or MongoDB.
+
+```bash
+# Prerequisites: Docker and Docker Compose installed
+# Get Docker: https://docs.docker.com/get-docker/
+
+# 1. Clone repository
+git clone https://github.com/vistanoop/genAi_receipt.git
+cd genAi_receipt
+
+# 2. Configure environment variables
+cp .env.docker.template .env
+# Edit .env and add your GEMINI_API_KEY and JWT_SECRET
+
+# 3. Start the application
+docker compose up -d
+
+# That's it! 🎉
+```
+
+**Access Application**:
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:5000/api
+
+📖 **For detailed Docker instructions, see [DOCKER_SETUP.md](DOCKER_SETUP.md)**
+
+### 💻 Option 2: Manual Installation
+
+#### Prerequisites
 
 ```bash
 # Required Software
@@ -77,7 +108,7 @@ Get SpendAhead running on your machine in minutes!
 - Git
 ```
 
-### Installation Steps
+#### Installation Steps
 
 ```bash
 # 1. Clone repository
@@ -103,7 +134,7 @@ cd backend && npm run dev
 npm run dev
 ```
 
-### Access Application
+#### Access Application
 - **Frontend**: http://localhost:3000
 - **Backend API**: http://localhost:5000/api
 
@@ -174,6 +205,84 @@ npm run dev
 - **Responsive design** - Works on all devices
 - **Smooth animations** - Polished, professional interface
 - **Intuitive navigation** - Find what you need quickly
+
+---
+
+## 🐳 Docker Setup
+
+SpendAhead fully supports Docker and Docker Compose for easy deployment and development!
+
+### Why Use Docker?
+
+✅ **No Manual Installation** - No need to install Node.js, MongoDB, or other dependencies  
+✅ **Consistent Environment** - Works the same on all machines  
+✅ **Quick Setup** - Get running in minutes  
+✅ **Easy Cleanup** - Remove everything with one command  
+✅ **Production Ready** - Same setup for development and production
+
+### Quick Docker Start
+
+```bash
+# 1. Install Docker Desktop from https://docs.docker.com/get-docker/
+
+# 2. Clone and navigate to repository
+git clone https://github.com/vistanoop/genAi_receipt.git
+cd genAi_receipt
+
+# 3. Set up environment variables
+cp .env.docker.template .env
+# Edit .env and add your GEMINI_API_KEY and JWT_SECRET
+
+# 4. Start all services
+docker compose up -d
+
+# 5. Access the application
+# Frontend: http://localhost:3000
+# Backend: http://localhost:5000/api
+# MongoDB: localhost:27017
+```
+
+### Docker Services
+
+The Docker setup includes three services:
+
+- **Frontend** (Next.js) - Port 3000
+- **Backend** (Express) - Port 5000  
+- **MongoDB** (Database) - Port 27017
+
+All services automatically connect and communicate with each other!
+
+### Common Docker Commands
+
+```bash
+# Start services
+docker compose up -d
+
+# Stop services
+docker compose down
+
+# View logs
+docker compose logs -f
+
+# Rebuild after code changes
+docker compose up --build -d
+
+# Reset everything (deletes all data)
+docker compose down -v
+```
+
+### 📖 Detailed Docker Documentation
+
+For complete Docker setup instructions, troubleshooting, and advanced configuration, see:
+
+**[📘 DOCKER_SETUP.md](DOCKER_SETUP.md)**
+
+This comprehensive guide includes:
+- Prerequisites and installation
+- Detailed configuration options
+- Troubleshooting common issues
+- Production deployment tips
+- Docker commands reference
 
 ---
 
