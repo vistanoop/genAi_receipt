@@ -121,6 +121,20 @@ The AI responds with detailed, personalized analysis including emojis, numbers, 
 - Target date
 - Priority level (High, Medium, Low)
 - Remaining amount and months needed
+```bash
+# Gemini AI API Key (for receipt scanning)
+GEMINI_API_KEY=your_gemini_api_key_here
+
+# MongoDB Connection String
+MONGODB_URI=mongodb://localhost:27017/expense_tracker
+
+# JWT Secret (change in production for security)
+JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+```
+
+Replace `your_gemini_api_key_here` with the API key you got from step 3.
+
+**Note:** For local development, you need MongoDB installed and running on your machine. Alternatively, you can use MongoDB Atlas (cloud) - just update the `MONGODB_URI` with your Atlas connection string.
 
 ## 🎨 Design & User Experience
 
