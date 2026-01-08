@@ -39,6 +39,7 @@ npm install
 
 # Setup environment variables
 cp .env.example .env
+
 # Edit .env with your MongoDB URI and JWT secret
 
 # Run the backend server
