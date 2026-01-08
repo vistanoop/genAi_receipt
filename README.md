@@ -1,8 +1,29 @@
 # FlowCast - AI-Powered Financial Expense Manager 💰
 
-**Track your spending, scan receipts with AI, and understand your financial patterns.**
+**Track your spending, scan receipts with AI, forecast cash flow, and make informed financial decisions.**
 
-FlowCast is an intelligent expense management platform that helps you track your spending, categorize expenses, and gain insights into your financial habits with AI-powered receipt scanning.
+FlowCast is an intelligent expense management platform that helps you track your spending, categorize expenses, predict future cash flow, simulate purchase decisions, and set savings goals with comprehensive financial analytics.
+
+## ✨ Complete Features
+
+### 🎯 Core Features
+- **Complete Onboarding** - Step-by-step setup with financial profile and safety rules
+- **Expense Tracking** - Add, categorize, and manage expenses with detailed analytics
+- **Visual Analytics** - Interactive pie charts and spending visualizations
+- **Smart Dashboard** - Real-time financial overview with insights
+- **Cash-Flow Forecast** - Predict month-end balance with day-by-day timeline
+- **Simulate & Decide** - Test "what-if" scenarios before making purchases
+- **Savings Goals** - Set and track multiple financial goals
+- **AI-Powered Receipt Scanning** - Extract expenses from receipts automatically
+
+### 💡 Advanced Features
+- User activity tracking and login history
+- Multi-currency support (INR, USD, EUR, GBP, etc.)
+- Fixed/recurring expense management
+- Income tracking with multiple sources
+- Risk tolerance customization
+- Monthly savings goals and thresholds
+- Account status management
 
 ## 🚀 Complete Setup Guide
 
@@ -10,7 +31,7 @@ FlowCast is an intelligent expense management platform that helps you track your
 
 Before starting, ensure you have:
 - **Node.js** (v18 or higher) - [Download here](https://nodejs.org/)
-- **MongoDB** (v6 or higher) - [Download here](https://www.mongodb.com/try/download/community)
+- **MongoDB Atlas Account** (Recommended - Free tier available) OR **Local MongoDB** (v6 or higher)
 - **Git** - [Download here](https://git-scm.com/downloads)
 
 ### Step 1: Clone the Repository
@@ -20,7 +41,88 @@ git clone https://github.com/vistanoop/genAi_receipt.git
 cd genAi_receipt
 ```
 
-### Step 2: Backend Setup
+### Step 2: Database Setup (Choose One)
+
+#### Option A: MongoDB Atlas (Recommended for Production) ☁️
+
+MongoDB Atlas is a cloud-based MongoDB service that's perfect for production deployments. It offers:
+- Automatic backups and disaster recovery
+- Global distribution and high availability
+- No server maintenance required
+- Free tier with 512MB storage
+
+**Setup Steps:**
+
+1. **Create MongoDB Atlas Account**
+   - Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register)
+   - Sign up for a free account
+   - Verify your email
+
+2. **Create a Cluster**
+   - Click "Build a Cluster" or "Create"
+   - Choose the **FREE** tier (M0 Sandbox)
+   - Select your preferred cloud provider and region (choose closest to your users)
+   - Click "Create Cluster" (takes 3-5 minutes)
+
+3. **Create Database User**
+   - Go to "Database Access" in the left sidebar
+   - Click "Add New Database User"
+   - Choose "Password" authentication
+   - Set username (e.g., `flowcast-admin`)
+   - Click "Autogenerate Secure Password" and **SAVE IT**
+   - Set "Database User Privileges" to "Read and write to any database"
+   - Click "Add User"
+
+4. **Configure Network Access**
+   - Go to "Network Access" in the left sidebar
+   - Click "Add IP Address"
+   - Choose one option:
+     - **For Development**: Click "Allow Access from Anywhere" (0.0.0.0/0)
+     - **For Production**: Enter your server's IP address
+   - Click "Confirm"
+
+5. **Get Connection String**
+   - Go to "Database" in the left sidebar
+   - Click "Connect" on your cluster
+   - Choose "Connect your application"
+   - Select "Node.js" as driver and latest version
+   - Copy the connection string (looks like: `mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority`)
+   - Replace `<username>` with your database username
+   - Replace `<password>` with your database password
+   - Add your database name after `.net/` (e.g., `genai-receipt`)
+
+   **Final format:**
+   ```
+   mongodb+srv://flowcast-admin:YourPassword123@cluster0.xxxxx.mongodb.net/genai-receipt?retryWrites=true&w=majority
+   ```
+
+#### Option B: Local MongoDB (Development Only) 💻
+
+**Setup Steps:**
+
+1. **Install MongoDB**
+   - macOS: `brew install mongodb-community`
+   - Windows: [Download MongoDB Installer](https://www.mongodb.com/try/download/community)
+   - Linux: Follow [official guide](https://docs.mongodb.com/manual/administration/install-on-linux/)
+
+2. **Start MongoDB**
+   - macOS: `brew services start mongodb-community`
+   - Windows: Start MongoDB service from Services
+   - Linux: `sudo systemctl start mongod`
+
+3. **Verify MongoDB is Running**
+   ```bash
+   mongosh
+   # or
+   mongo
+   ```
+
+Your connection string will be:
+```
+mongodb://localhost:27017/genai-receipt
+```
+
+### Step 3: Backend Setup
 
 The backend is a standalone Node.js/Express server that handles all API requests and database operations.
 
@@ -39,10 +141,11 @@ cp .env.example .env
 
 Edit `backend/.env` with your configuration:
 
+**For MongoDB Atlas:**
 ```env
-# MongoDB Connection
-# Local MongoDB (make sure MongoDB is running on your machine)
-MONGODB_URI=mongodb://localhost:27017/genai-receipt
+# MongoDB Atlas Connection
+MONGODB_URI=mongodb+srv://flowcast-admin:YourPassword123@cluster0.xxxxx.mongodb.net/genai-receipt?retryWrites=true&w=majority
+MONGODB_TIMEOUT=10000
 
 # JWT Secret (IMPORTANT: Change this to a strong random string)
 # Generate a secure secret: openssl rand -base64 32
@@ -56,11 +159,28 @@ NODE_ENV=development
 FRONTEND_URL=http://localhost:3000
 ```
 
-**Important Notes:**
-- Make sure MongoDB is installed and running before starting the backend
-- To start MongoDB locally: `mongod` or `brew services start mongodb-community` (macOS)
-- Change `JWT_SECRET` to a strong random string for security
-- Default port is 5001, change if needed
+**For Local MongoDB:**
+```env
+# Local MongoDB Connection
+MONGODB_URI=mongodb://localhost:27017/genai-receipt
+MONGODB_TIMEOUT=10000
+
+# JWT Secret (IMPORTANT: Change this to a strong random string)
+JWT_SECRET=your-very-strong-secret-key-change-this-in-production
+
+# Server Configuration
+PORT=5001
+NODE_ENV=development
+
+# Frontend URL (for CORS)
+FRONTEND_URL=http://localhost:3000
+```
+
+**Important Security Notes:**
+- ⚠️ **NEVER** commit `.env` files to version control
+- ⚠️ Generate a strong JWT_SECRET using: `openssl rand -base64 32`
+- ⚠️ Change default passwords and secrets in production
+- ⚠️ For MongoDB Atlas, keep your database password secure
 
 #### Start the Backend Server
 
@@ -69,14 +189,16 @@ FRONTEND_URL=http://localhost:3000
 npm run dev
 ```
 
-You should see:
+**Expected Output:**
 ```
 Server running on port 5001
 Environment: development
-MongoDB Connected: localhost
+→ Connecting to MongoDB...
+✓ MongoDB Atlas (Cloud) Connected: cluster0-shard-00-00.xxxxx.mongodb.net
+✓ Database: genai-receipt
 ```
 
-### Step 3: Frontend Setup
+### Step 4: Frontend Setup
 
 ```bash
 # Go back to the root directory
@@ -86,16 +208,17 @@ cd ..
 npm install
 
 # Create environment file
-cp .env.local.example .env.local
+cp .env.example .env.local
 ```
 
 #### Configure Frontend Environment Variables
 
 Edit `.env.local` in the root directory:
 
+**For MongoDB Atlas:**
 ```env
-# MongoDB Connection (for Next.js API routes, if used)
-MONGODB_URI=mongodb://localhost:27017/genai-receipt
+# MongoDB Atlas Connection (for Next.js API routes)
+MONGODB_URI=mongodb+srv://flowcast-admin:YourPassword123@cluster0.xxxxx.mongodb.net/genai-receipt?retryWrites=true&w=majority
 
 # JWT Secret (must match backend JWT_SECRET)
 JWT_SECRET=your-very-strong-secret-key-change-this-in-production
@@ -103,6 +226,23 @@ JWT_SECRET=your-very-strong-secret-key-change-this-in-production
 # Optional: Google Gemini AI API Key for receipt scanning
 # Get your API key from: https://makersuite.google.com/app/apikey
 GEMINI_API_KEY=your-gemini-api-key-here
+
+# Next.js Configuration
+NEXT_PUBLIC_API_URL=http://localhost:3000/api
+```
+
+**For Local MongoDB:**
+```env
+# Local MongoDB Connection (for Next.js API routes)
+MONGODB_URI=mongodb://localhost:27017/genai-receipt
+JWT_SECRET=your-very-strong-secret-key-change-this-in-production
+
+# Optional: Google Gemini AI API Key for receipt scanning
+# Get your API key from: https://makersuite.google.com/app/apikey
+GEMINI_API_KEY=your-gemini-api-key-here
+
+# Next.js Configuration
+NEXT_PUBLIC_API_URL=http://localhost:3000/api
 ```
 
 **Important Notes:**
@@ -119,15 +259,35 @@ npm run dev
 
 Visit [http://localhost:3000](http://localhost:3000) to use the app!
 
-### Step 4: Verify Setup
+### Step 5: Verify Setup
 
 1. **Backend is running**: [http://localhost:5001](http://localhost:5001) should show API information
-2. **Frontend is running**: [http://localhost:3000](http://localhost:3000) should show the login page
-3. **MongoDB is connected**: Backend console should show "MongoDB Connected"
+2. **Frontend is running**: [http://localhost:3000](http://localhost:3000) should show the landing page
+3. **MongoDB is connected**: Backend console should show:
+   - For Atlas: `✓ MongoDB Atlas (Cloud) Connected: cluster0-xxxxx.mongodb.net`
+   - For Local: `✓ MongoDB (Local) Connected: localhost`
 
 ### Troubleshooting
 
-#### MongoDB Connection Issues
+#### MongoDB Atlas Connection Issues
+
+**"Authentication failed"**
+- Double-check your username and password in the connection string
+- Ensure password doesn't contain special characters (or URL-encode them)
+- Verify the database user has "Read and write to any database" privileges
+
+**"Network timeout" or "Cannot reach server"**
+- Go to Atlas "Network Access" and add your IP address
+- For development, use "Allow Access from Anywhere" (0.0.0.0/0)
+- Check your firewall settings
+
+**"Unable to connect to server"**
+- Verify your connection string format is correct
+- Ensure you added the database name after `.net/`
+- Check that your cluster is running (not paused)
+
+#### Local MongoDB Connection Issues
+
 ```bash
 # Check if MongoDB is running
 mongosh  # or mongo (depending on version)
@@ -158,31 +318,97 @@ rm -rf node_modules package-lock.json
 npm install
 ```
 
-## ✨ Key Features
+## 📊 Complete Feature List
+
+### 🎯 Complete Onboarding
+- Step-by-step financial profile setup
+- Monthly income and currency selection
+- Safety buffer configuration (minimum balance, savings floor)
+- Risk tolerance assessment
+- Personalized financial rules
+
+### 💰 Expense Tracking
+- Add expenses manually with detailed information
+- Categorize spending (15+ categories including housing, food, transportation, etc.)
+- Edit and delete expenses
+- Real-time expense statistics
+- Transaction history with filtering
+- Visual spending breakdown with charts
+
+### 📈 Visual Analytics
+- Interactive pie charts for spending breakdown
+- Category-wise expense visualization
+- Total spending overview
+- Average expense calculation
+- Transaction timeline
+- Multi-dimensional data insights
+
+### 🎯 Smart Dashboard
+- Real-time financial overview
+- Total expenses and statistics
+- Active spending categories counter
+- Quick expense entry form
+- Recent transactions list with details
+
+### 📅 Cash-Flow Forecast
+- Month-end balance prediction based on spending patterns
+- Day-by-day timeline visualization
+- Current vs predicted balance comparison
+- Burn rate calculation (spending as % of income)
+- Next 3 months projection
+- Risk zone indicators (safe/warning/danger)
+
+### 🧪 Simulate & Decide
+- Test "what-if" purchase scenarios before spending
+- Impact analysis on month-end balance
+- Balance change predictions
+- Risk level assessment (how purchase affects your safety)
+- Goal delay calculations (how many days goals are pushed back)
+- AI-powered recommendations and explanations
+
+### 🎯 Savings Goals
+- Create and track multiple savings goals
+- Set target amounts and target dates
+- Progress tracking with status indicators
+- Priority-based goal management (high/medium/low)
+- Goal types (emergency fund, long-term savings, purchase, investment, other)
+- Monthly contribution planning
+- Current amount vs target tracking
 
 ### 🔐 Authentication System
 - Secure user signup and login
 - JWT-based authentication
-- Password hashing with bcrypt
+- Password hashing with bcrypt (10 rounds)
 - Protected routes and sessions
+- Login history tracking
+- Account status management
 
-### 💰 Expense Management
-- Add expenses manually with detailed information
-- Categorize spending (groceries, food, shopping, etc.)
-- View real-time expense statistics
-- Delete and manage existing expenses
-- Visual spending breakdown with charts
+### 👤 User Profile Management
+- Update personal information
+- Modify financial profile
+- Adjust safety rules and thresholds
+- Change risk tolerance settings
+- Notification preferences
+- Activity tracking (login count, last login)
 
-### 📊 Analytics & Insights
-- Total spending overview
-- Spending by category (pie chart visualization)
-- Average expense calculation
-- Transaction history timeline
+### 💳 Income Tracking
+- Add income from multiple sources
+- Source types (salary, freelance, business, investment, rental, other)
+- Recurring vs one-time income tracking
+- Frequency management (monthly, quarterly, yearly)
+- Income date tracking
+
+### 🔁 Fixed Expenses Management
+- Recurring expense tracking (rent, EMI, subscriptions, etc.)
+- Due date tracking (1-31 of month)
+- Category-based organization
+- Active/inactive status for temporary pauses
+- Monthly obligation calculations
 
 ### 🤖 AI-Powered Features (Optional)
 - Receipt scanning with Google Gemini AI
-- Automatic expense extraction from receipts
-- Smart categorization
+- Automatic expense extraction from images
+- Smart category suggestions
 
 ## 🌟 Core Philosophy
 

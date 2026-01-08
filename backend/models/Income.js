@@ -43,7 +43,13 @@ const IncomeSchema = new mongoose.Schema(
   }
 );
 
-// Index for faster queries
+// Compound index for faster queries by user and date
 IncomeSchema.index({ userId: 1, date: -1 });
+
+// Index for recurring income queries
+IncomeSchema.index({ userId: 1, isRecurring: 1 });
+
+// Index for frequency-based queries
+IncomeSchema.index({ userId: 1, frequency: 1 });
 
 export default mongoose.models.Income || mongoose.model('Income', IncomeSchema);

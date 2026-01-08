@@ -54,11 +54,54 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    // User Activity Tracking
+    lastLoginAt: {
+      type: Date,
+      default: null,
+    },
+    loginCount: {
+      type: Number,
+      default: 0,
+    },
+    // User Preferences
+    notifications: {
+      email: {
+        type: Boolean,
+        default: true,
+      },
+      weeklyReport: {
+        type: Boolean,
+        default: true,
+      },
+      savingsReminder: {
+        type: Boolean,
+        default: true,
+      },
+    },
+    // Account Status
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+    accountStatus: {
+      type: String,
+      enum: ['active', 'suspended', 'deleted'],
+      default: 'active',
+    },
   },
   {
-    timestamps: true,
+    timestamps: true, // Adds createdAt and updatedAt automatically
   }
 );
+
+// Index for faster queries on email (unique already creates an index)
+UserSchema.index({ email: 1 });
+
+// Index for active users
+UserSchema.index({ isActive: 1, accountStatus: 1 });
+
+// Index for user statistics
+UserSchema.index({ createdAt: -1 });
 
 // Hash password before saving
 UserSchema.pre('save', async function () {
@@ -72,6 +115,13 @@ UserSchema.pre('save', async function () {
 // Compare password method
 UserSchema.methods.comparePassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
+};
+
+// Method to update last login
+UserSchema.methods.recordLogin = async function () {
+  this.lastLoginAt = new Date();
+  this.loginCount = (this.loginCount || 0) + 1;
+  await this.save();
 };
 
 export default mongoose.models.User || mongoose.model('User', UserSchema);

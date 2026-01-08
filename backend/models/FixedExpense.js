@@ -52,7 +52,13 @@ const FixedExpenseSchema = new mongoose.Schema(
   }
 );
 
-// Index for faster queries
+// Compound index for faster queries by user and active status
 FixedExpenseSchema.index({ userId: 1, isActive: 1 });
+
+// Index for due day queries (for upcoming payments)
+FixedExpenseSchema.index({ userId: 1, dueDay: 1, isActive: 1 });
+
+// Index for category-based queries
+FixedExpenseSchema.index({ userId: 1, category: 1 });
 
 export default mongoose.models.FixedExpense || mongoose.model('FixedExpense', FixedExpenseSchema);
