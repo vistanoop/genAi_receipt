@@ -260,7 +260,7 @@ export default function SimulatePage() {
         {!result && (
           <div className="text-center text-muted-foreground py-12">
             <Sparkles className="w-12 h-12 mx-auto mb-4 opacity-50" />
-            <p>Enter an amount and click "Simulate Impact" to see results</p>
+            <p>Enter an amount and click &quot;Simulate Impact&quot; to see results</p>
           </div>
         )}
       </div>
