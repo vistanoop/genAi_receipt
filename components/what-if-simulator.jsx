@@ -41,11 +41,12 @@ export default function WhatIfSimulator() {
   const [isSimulating, setIsSimulating] = useState(false);
 
   const handleSimulate = () => {
-    if (!amount || parseFloat(amount) <= 0) return;
+    const parsedAmount = parseFloat(amount);
+    if (!amount || isNaN(parsedAmount) || parsedAmount <= 0) return;
 
     setIsSimulating(true);
     const result = simulateWhatIf({
-      amount: parseFloat(amount),
+      amount: parsedAmount,
       day: parseInt(day),
       duration: parseInt(duration),
     });
