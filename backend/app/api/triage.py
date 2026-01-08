@@ -88,8 +88,19 @@ async def submit_triage(
         
         # Store in triage logs
         triage_repo = TriageRepository(database)
+        
+        # Extract patient name from symptoms field if present
+        patient_name = None
+        logger.info(f"DEBUG - Symptoms received: {request.vitals.symptoms}")
+        if request.vitals.symptoms and 'Patient:' in request.vitals.symptoms:
+            patient_name = request.vitals.symptoms.split('|')[0].replace('Patient:', '').strip()
+            logger.info(f"DEBUG - Extracted patient name: {patient_name}")
+        else:
+            logger.warning(f"DEBUG - No patient name found. Symptoms: {request.vitals.symptoms}")
+        
         triage_log = TriageLogDocument(
             user_id=user_id,
+            patient_name=patient_name,
             age=request.vitals.age,
             systolic_bp=request.vitals.systolic_bp,
             diastolic_bp=request.vitals.diastolic_bp,

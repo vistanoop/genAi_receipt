@@ -27,13 +27,13 @@ class RegisterRequest(BaseModel):
     email: EmailStr
     password: str = Field(..., min_length=6)
     full_name: str = Field(..., min_length=2, max_length=100)
-    role: str = Field(..., pattern="^(mother|doctor)$")
+    role: str = Field(..., pattern="^(asha|doctor)$")
     
     # Optional fields
     age: Optional[int] = Field(None, ge=15, le=100)
     phone: Optional[str] = None
     
-    # Mother-specific
+    # ASHA-specific
     gestational_weeks: Optional[int] = Field(None, ge=1, le=42)
     pre_existing_conditions: List[str] = Field(default_factory=list)
     
@@ -47,7 +47,7 @@ class RegisterRequest(BaseModel):
                 "email": "sarah@example.com",
                 "password": "SecurePass123",
                 "full_name": "Sarah Johnson",
-                "role": "mother",
+                "role": "asha",
                 "age": 28,
                 "gestational_weeks": 24,
                 "pre_existing_conditions": ["gestational_diabetes"]

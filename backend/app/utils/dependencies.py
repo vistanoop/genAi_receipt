@@ -101,25 +101,25 @@ async def get_current_doctor(
     return current_user
 
 
-async def get_current_mother(
+async def get_current_asha(
     current_user: dict = Depends(get_current_user)
 ) -> dict:
     """
-    Dependency to ensure current user is a mother.
+    Dependency to ensure current user is an ASHA worker.
     
     Args:
-        current_user: Current authenticated user
+        current_user: Authenticated user from JWT
     
     Returns:
-        User document if mother
+        User document if ASHA worker
     
     Raises:
-        HTTPException: If user is not a mother
+        HTTPException: If user is not an ASHA worker
     """
-    if current_user.get("role") != "mother":
+    if current_user.get("role") != "asha":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="This endpoint requires mother privileges"
+            detail="This endpoint requires ASHA worker privileges"
         )
     return current_user
 

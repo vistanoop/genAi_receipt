@@ -14,10 +14,18 @@ def show_vitals_form() -> Optional[Dict]:
         Dict with vitals data if form is valid, None otherwise
     """
     
+    # Patient Name (for ASHA workers)
+    st.markdown("### 👤 Patient Information")
+    patient_name = st.text_input(
+        "Patient Name",
+        placeholder="Enter patient's full name",
+        help="Enter the name of the pregnant woman"
+    )
+    
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown("### 👤 Personal Information")
+        st.markdown("### 📋 Medical Details")
         age = st.number_input(
             "Age (years)",
             min_value=15,
@@ -130,8 +138,9 @@ def show_vitals_form() -> Optional[Dict]:
         st.warning("**Pre-Assessment Warnings:**\n" + "\n".join(warnings))
     
     # Return vitals data if valid
-    if systolic_bp > diastolic_bp:
+    if systolic_bp > diastolic_bp and patient_name:
         vitals_data = {
+            "patient_name": patient_name,
             "age": age,
             "systolic_bp": systolic_bp,
             "diastolic_bp": diastolic_bp,
@@ -146,5 +155,7 @@ def show_vitals_form() -> Optional[Dict]:
             vitals_data["symptoms"] = symptoms
         
         return vitals_data
+    elif not patient_name:
+        st.error("⚠️ Please enter patient name")
     
     return None

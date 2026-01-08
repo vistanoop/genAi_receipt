@@ -5,7 +5,7 @@ Multi-page Streamlit application with role-based navigation
 
 import streamlit as st
 from utils.state_manager import initialize_session_state, clear_session_state
-from views import login, mother_panel, doctor_panel, about, contact
+from views import login, asha_panel, doctor_panel, about, contact
 
 # Configure page
 st.set_page_config(
@@ -33,7 +33,7 @@ def show_sidebar():
             st.subheader("Navigation")
             
             # Role-based navigation
-            if st.session_state.user_role == "mother":
+            if st.session_state.user_role == "asha":
                 page = st.radio(
                     "Go to",
                     ["Dashboard", "About", "Contact"],
@@ -67,9 +67,9 @@ def main():
         selected_page = show_sidebar()
         
         # Route to appropriate page
-        if st.session_state.user_role == "mother":
+        if st.session_state.user_role == "asha":
             if selected_page == "Dashboard":
-                mother_panel.show()
+                asha_panel.show()
             elif selected_page == "About":
                 about.show()
             elif selected_page == "Contact":

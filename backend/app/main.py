@@ -21,7 +21,7 @@ from app.engine.ml_model import predictor, MLModelException
 from app.engine.circuit import CircuitBreakerOpen
 from app.engine.zudu_integration import zudu_client, ZuduAPIException
 from app.utils.logger import logger
-from app.api import auth, triage, doctor, mother, admin
+from app.api import auth, triage, doctor, asha, admin
 
 
 @asynccontextmanager
@@ -255,7 +255,7 @@ async def generic_exception_handler(request: Request, exc: Exception):
 app.include_router(auth.router)
 app.include_router(triage.router)
 app.include_router(doctor.router)
-app.include_router(mother.router)
+app.include_router(asha.router)
 app.include_router(admin.router)
 
 

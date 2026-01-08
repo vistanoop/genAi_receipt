@@ -12,7 +12,7 @@ from enum import Enum
 
 class UserRole(str, Enum):
     """User role enumeration."""
-    MOTHER = "mother"
+    ASHA = "asha"
     DOCTOR = "doctor"
     ADMIN = "admin"
 
@@ -36,7 +36,7 @@ class UserDocument(BaseModel):
     age: Optional[int] = None
     phone: Optional[str] = None
     
-    # Mother-specific fields
+    # ASHA-specific fields
     gestational_weeks: Optional[int] = None
     due_date: Optional[datetime] = None
     pre_existing_conditions: List[str] = Field(default_factory=list)
@@ -55,7 +55,7 @@ class UserDocument(BaseModel):
             "example": {
                 "email": "sarah@example.com",
                 "full_name": "Sarah Johnson",
-                "role": "mother",
+                "role": "asha",
                 "age": 28,
                 "gestational_weeks": 24,
                 "pre_existing_conditions": ["gestational_diabetes"]
@@ -68,6 +68,7 @@ class TriageLogDocument(BaseModel):
     Triage assessment log document.
     """
     user_id: str
+    patient_name: Optional[str] = None  # Name of the patient (for ASHA workers)
     
     # Input vitals
     age: int

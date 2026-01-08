@@ -60,12 +60,12 @@ def show():
             
             reg_role = st.selectbox(
                 "I am a:",
-                ["mother", "doctor"],
-                format_func=lambda x: "👶 Mother" if x == "mother" else "👨‍⚕️ Doctor"
+                ["asha", "doctor"],
+                format_func=lambda x: "👶 asha" if x == "asha" else "👨‍⚕️ Doctor"
             )
             
-            # Additional fields for mother
-            if reg_role == "mother":
+            # Additional fields for asha
+            if reg_role == "asha":
                 reg_age = st.number_input("Age", min_value=15, max_value=60, value=28)
                 reg_gestational_weeks = st.number_input("Gestational Weeks", min_value=0, max_value=42, value=20)
             else:
@@ -91,7 +91,7 @@ def show():
                                 "role": reg_role
                             }
                             
-                            if reg_role == "mother":
+                            if reg_role == "asha":
                                 payload["age"] = reg_age
                                 payload["gestational_weeks"] = reg_gestational_weeks
                             

@@ -169,13 +169,13 @@ class TriageRepository:
     
     async def get_priority_patients(
         self,
-        min_risk_level: RiskLevel = RiskLevel.MEDIUM
+        min_risk_level: RiskLevel = RiskLevel.LOW
     ) -> List[Dict[str, Any]]:
         """
         Get patients requiring attention sorted by priority.
         
         Args:
-            min_risk_level: Minimum risk level filter
+            min_risk_level: Minimum risk level filter (default: LOW to include all)
         
         Returns:
             List of patient records with priority scores
@@ -188,19 +188,20 @@ class TriageRepository:
             RiskLevel.CRITICAL: 4
         }
         
-        # Get latest assessment for each user
+        # Get latest assessment for each patient (grouped by patient_name, not user_id)
+        # user_id = ASHA worker who submitted, patient_name = actual patient
         pipeline = [
             {"$sort": {"timestamp": -1}},
             {"$group": {
-                "_id": "$user_id",
+                "_id": "$patient_name",  # Group by patient name, not ASHA worker
                 "latest_assessment": {"$first": "$$ROOT"}
             }},
-            {"$replaceRoot": {"newRoot": "$latest_assessment"}},
-            {"$match": {"risk_level": {"$in": [RiskLevel.MEDIUM, RiskLevel.HIGH, RiskLevel.CRITICAL]}}}
+            {"$replaceRoot": {"newRoot": "$latest_assessment"}}
+            # Removed risk level filter to include ALL patients
         ]
         
         cursor = self.collection.aggregate(pipeline)
-        patients = await cursor.to_list(length=100)
+        patients = await cursor.to_list(length=1000)  # Increased limit to 1000
         
         # Calculate priority scores
         for patient in patients:

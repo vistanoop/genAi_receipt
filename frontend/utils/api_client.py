@@ -98,15 +98,13 @@ class BackendAPIClient:
         headers = self._get_headers(token)
         headers["x-idempotency-key"] = idempotency_key
         
-        # Separate notes from vitals if present
-        notes = vitals.pop("symptoms", None)
+        # Keep symptoms in vitals (don't pop it out)
+        # The backend expects vitals.symptoms with patient name
         
         # Wrap vitals in the expected format
         payload = {
             "vitals": vitals
         }
-        if notes:
-            payload["notes"] = notes
         
         response = requests.post(
             f"{self.base_url}/triage",
@@ -166,9 +164,9 @@ class BackendAPIClient:
     
     @retry_on_failure(max_attempts=3)
     def get_profile(self, token: str) -> Dict:
-        """Fetch mother's profile"""
+        """Fetch ASHA worker's profile"""
         response = requests.get(
-            f"{self.base_url}/mother/profile",
+            f"{self.base_url}/asha/profile",
             headers=self._get_headers(token),
             timeout=self.timeout
         )
@@ -178,9 +176,9 @@ class BackendAPIClient:
     
     @retry_on_failure(max_attempts=3)
     def update_profile(self, profile_data: Dict, token: str) -> Dict:
-        """Update mother's profile"""
+        """Update ASHA worker's profile"""
         response = requests.put(
-            f"{self.base_url}/mother/profile",
+            f"{self.base_url}/asha/profile",
             json=profile_data,
             headers=self._get_headers(token),
             timeout=self.timeout
@@ -191,9 +189,9 @@ class BackendAPIClient:
     
     @retry_on_failure(max_attempts=3)
     def get_history(self, token: str) -> List[Dict]:
-        """Fetch mother's triage history"""
+        """Fetch ASHA worker's triage history"""
         response = requests.get(
-            f"{self.base_url}/mother/history",
+            f"{self.base_url}/asha/history",
             headers=self._get_headers(token),
             timeout=self.timeout
         )
@@ -205,7 +203,7 @@ class BackendAPIClient:
     def get_health_passport(self, token: str) -> Dict:
         """Generate health passport report"""
         response = requests.get(
-            f"{self.base_url}/mother/health-passport",
+            f"{self.base_url}/asha/health-passport",
             headers=self._get_headers(token),
             timeout=self.timeout
         )

@@ -51,7 +51,7 @@ async def get_emergency_feed(
         
         alert = EmergencyAlert(
             patient_id=record["user_id"],
-            patient_name=f"Patient #{record['user_id'][-6:]}",  # Anonymized
+            patient_name=record.get("patient_name") or f"Patient #{record['user_id'][-6:]}",
             age=record["age"],
             gestational_weeks=record["gestational_weeks"],
             risk_level=record["risk_level"],
@@ -101,7 +101,7 @@ async def get_priority_patients(
         
         patient = PriorityPatient(
             patient_id=record["user_id"],
-            patient_name=f"Patient #{record['user_id'][-6:]}",
+            patient_name=record.get("patient_name") or f"Patient #{record['user_id'][-6:]}",
             age=record["age"],
             gestational_weeks=record["gestational_weeks"],
             risk_level=record["risk_level"],
@@ -157,15 +157,24 @@ async def get_patient_details(
             confidence=record["confidence"],
             alerts=record["alerts"],
             vitals={
+                "age": record["age"],
                 "bp": f"{record['systolic_bp']}/{record['diastolic_bp']}",
+                "systolic_bp": record["systolic_bp"],
+                "diastolic_bp": record["diastolic_bp"],
                 "heart_rate": record["heart_rate"],
                 "blood_oxygen": record["blood_oxygen"],
                 "blood_sugar": record["blood_sugar"],
-                "body_temp": record["body_temp"]
+                "body_temp": record["body_temp"],
+                "gestational_weeks": record["gestational_weeks"],
+                "patient_name": record.get("patient_name", "Unknown")
             }
         )
         for record in history
     ]
+    
+    # Get latest assessment for patient info
+    latest_assessment = history[0] if history else {}
+    patient_name = latest_assessment.get("patient_name") or f"Patient #{patient['_id'][-6:]}"
     
     logger.info(
         f"Patient details accessed by doctor: {current_user['_id']} "
@@ -175,9 +184,9 @@ async def get_patient_details(
     return {
         "patient": {
             "patient_id": patient["_id"],
-            "full_name": f"Patient #{patient['_id'][-6:]}",
-            "age": patient.get("age"),
-            "gestational_weeks": patient.get("gestational_weeks"),
+            "full_name": patient_name,
+            "age": latest_assessment.get("age") or patient.get("age"),
+            "gestational_weeks": latest_assessment.get("gestational_weeks") or patient.get("gestational_weeks"),
             "pre_existing_conditions": patient.get("pre_existing_conditions", [])
         },
         "history": history_entries

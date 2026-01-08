@@ -91,6 +91,12 @@ class ClinicalVitals(BaseModel):
         description="Gestational age in weeks"
     )
     
+    symptoms: Optional[str] = Field(
+        None,
+        max_length=500,
+        description="Optional symptoms or patient notes"
+    )
+    
     @model_validator(mode='after')
     def validate_blood_pressure(self):
         """
