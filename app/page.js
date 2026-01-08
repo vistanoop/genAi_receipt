@@ -8,7 +8,7 @@ export default function ReceiptReaderPage() {
   const [error, setError] = useState("");
 
   const handleFileChange = async (e) => {
-    const file = e.target.files?.[0];
+    const file = e.target.files[0];
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
@@ -143,7 +143,7 @@ export default function ReceiptReaderPage() {
                 }}>
                   <span style={{ fontWeight: "500", color: "#374151" }}>Amount:</span>
                   <span style={{ fontWeight: "700", color: "#1f2937" }}>
-                    ${receiptData.amount?.toFixed(2) || "N/A"}
+                    {receiptData.amount != null ? `$${receiptData.amount.toFixed(2)}` : "N/A"}
                   </span>
                 </div>
 
@@ -155,7 +155,7 @@ export default function ReceiptReaderPage() {
                 }}>
                   <span style={{ fontWeight: "500", color: "#374151" }}>Date:</span>
                   <span style={{ color: "#1f2937" }}>
-                    {receiptData.date
+                    {receiptData.date && !isNaN(new Date(receiptData.date).getTime())
                       ? new Date(receiptData.date).toLocaleDateString()
                       : "N/A"}
                   </span>
