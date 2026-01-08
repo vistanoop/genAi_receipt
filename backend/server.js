@@ -1,5 +1,8 @@
-import express from 'express';
+// Load environment variables FIRST before any other imports
 import dotenv from 'dotenv';
+dotenv.config();
+
+import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import connectDB from './config/db.js';
@@ -12,9 +15,6 @@ import expenseRoutes from './routes/expenses.js';
 import incomeRoutes from './routes/income.js';
 import fixedExpenseRoutes from './routes/fixedExpenses.js';
 import goalRoutes from './routes/goals.js';
-
-// Load environment variables
-dotenv.config();
 
 // Initialize Express app
 const app = express();
