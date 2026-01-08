@@ -29,7 +29,7 @@ Node.js/Express backend server for the GenAI Receipt expense tracking applicatio
    Edit `.env` file with your configuration:
    - `MONGODB_URI`: Your MongoDB connection string
    - `JWT_SECRET`: A strong secret key for JWT tokens
-   - `PORT`: Server port (default: 5000)
+   - `PORT`: Server port (default: 5001)
    - `FRONTEND_URL`: Frontend URL for CORS (default: http://localhost:3000)
 
 4. **Start MongoDB** (if running locally):
@@ -50,13 +50,13 @@ Node.js/Express backend server for the GenAI Receipt expense tracking applicatio
    npm start
    ```
 
-The server will start on `http://localhost:5000` (or the port specified in .env)
+The server will start on `http://localhost:5001` (or the port specified in .env)
 
 ## 📚 API Documentation
 
 ### Base URL
 ```
-http://localhost:5000/api
+http://localhost:5001/api
 ```
 
 ### Authentication Endpoints
@@ -276,17 +276,17 @@ You can test the API using:
 ### Example cURL Request:
 ```bash
 # Signup
-curl -X POST http://localhost:5000/api/auth/signup \
+curl -X POST http://localhost:5001/api/auth/signup \
   -H "Content-Type: application/json" \
   -d '{"name":"John Doe","email":"john@example.com","password":"password123"}'
 
 # Login
-curl -X POST http://localhost:5000/api/auth/login \
+curl -X POST http://localhost:5001/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"john@example.com","password":"password123"}'
 
 # Get expenses (with token)
-curl -X GET http://localhost:5000/api/expenses \
+curl -X GET http://localhost:5001/api/expenses \
   -H "Authorization: Bearer <your-token>"
 ```
 
@@ -299,7 +299,7 @@ curl -X GET http://localhost:5000/api/expenses \
 
 ### Port Already in Use
 - Change the PORT in `.env` file
-- Kill existing process: `lsof -ti:5000 | xargs kill -9`
+- Kill existing process: `lsof -ti:5001 | xargs kill -9`
 
 ### CORS Errors
 - Update `FRONTEND_URL` in `.env` to match your frontend URL

@@ -46,7 +46,7 @@ cp .env.example .env
 npm run dev
 ```
 
-Backend API will be available at [http://localhost:5000](http://localhost:5000)
+Backend API will be available at [http://localhost:5001](http://localhost:5001)
 
 **[📖 Read Backend Documentation](./backend/README.md)** for detailed API reference.
 
