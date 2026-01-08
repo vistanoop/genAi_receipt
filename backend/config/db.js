@@ -5,7 +5,7 @@ const connectDB = async () => {
     const conn = await mongoose.connect(process.env.MONGODB_URI, {
       // Modern Mongoose doesn't need these options
       // useNewUrlParser and useUnifiedTopology are deprecated
-      serverSelectionTimeoutMS: 5000, // Timeout after 5 seconds instead of default 30
+      serverSelectionTimeoutMS: parseInt(process.env.MONGODB_TIMEOUT) || 10000, // Configurable timeout, default 10s
     });
     
     console.log(`MongoDB Connected: ${conn.connection.host}`);
@@ -26,7 +26,7 @@ mongoose.connection.on('error', (err) => {
 });
 
 mongoose.connection.on('disconnected', () => {
-  console.warn('MongoDB disconnected. Attempting to reconnect...');
+  console.warn('MongoDB disconnected');
 });
 
 mongoose.connection.on('reconnected', () => {
