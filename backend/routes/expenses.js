@@ -142,8 +142,16 @@ router.put('/:id', async (req, res) => {
       });
     }
 
-    // Update fields
-    if (amount !== undefined) expense.amount = amount;
+    // Update fields with validation
+    if (amount !== undefined) {
+      if (amount <= 0) {
+        return res.status(400).json({
+          success: false,
+          error: 'Amount must be greater than 0',
+        });
+      }
+      expense.amount = amount;
+    }
     if (category) expense.category = category;
     if (description) expense.description = description;
     if (date) expense.date = new Date(date);

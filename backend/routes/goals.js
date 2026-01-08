@@ -132,11 +132,35 @@ router.put('/:id', async (req, res) => {
       });
     }
 
-    // Update fields
+    // Update fields with validation
     if (name) goal.name = name;
-    if (targetAmount !== undefined) goal.targetAmount = targetAmount;
-    if (currentAmount !== undefined) goal.currentAmount = currentAmount;
-    if (monthlyContribution !== undefined) goal.monthlyContribution = monthlyContribution;
+    if (targetAmount !== undefined) {
+      if (targetAmount <= 0) {
+        return res.status(400).json({
+          success: false,
+          error: 'Target amount must be greater than 0',
+        });
+      }
+      goal.targetAmount = targetAmount;
+    }
+    if (currentAmount !== undefined) {
+      if (currentAmount < 0) {
+        return res.status(400).json({
+          success: false,
+          error: 'Current amount cannot be negative',
+        });
+      }
+      goal.currentAmount = currentAmount;
+    }
+    if (monthlyContribution !== undefined) {
+      if (monthlyContribution < 0) {
+        return res.status(400).json({
+          success: false,
+          error: 'Monthly contribution cannot be negative',
+        });
+      }
+      goal.monthlyContribution = monthlyContribution;
+    }
     if (targetDate) goal.targetDate = new Date(targetDate);
     if (priority) goal.priority = priority;
     if (type) goal.type = type;

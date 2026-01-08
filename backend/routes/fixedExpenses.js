@@ -116,11 +116,27 @@ router.put('/:id', async (req, res) => {
       });
     }
 
-    // Update fields
+    // Update fields with validation
     if (name) fixedExpense.name = name;
-    if (amount !== undefined) fixedExpense.amount = amount;
+    if (amount !== undefined) {
+      if (amount <= 0) {
+        return res.status(400).json({
+          success: false,
+          error: 'Amount must be greater than 0',
+        });
+      }
+      fixedExpense.amount = amount;
+    }
     if (category) fixedExpense.category = category;
-    if (dueDay !== undefined) fixedExpense.dueDay = dueDay;
+    if (dueDay !== undefined) {
+      if (dueDay < 1 || dueDay > 31) {
+        return res.status(400).json({
+          success: false,
+          error: 'Due day must be between 1 and 31',
+        });
+      }
+      fixedExpense.dueDay = dueDay;
+    }
     if (description !== undefined) fixedExpense.description = description;
     if (isActive !== undefined) fixedExpense.isActive = isActive;
 
