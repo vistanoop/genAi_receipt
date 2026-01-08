@@ -38,10 +38,27 @@ export const createExpense = async (req, res) => {
       });
     }
 
+    // Validate amount is a positive number
+    const parsedAmount = parseFloat(amount);
+    if (isNaN(parsedAmount) || parsedAmount <= 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'Amount must be a positive number',
+      });
+    }
+
+    // Validate description is not empty after trimming
+    if (!description.trim()) {
+      return res.status(400).json({
+        success: false,
+        error: 'Description cannot be empty',
+      });
+    }
+
     const expense = await Expense.create({
       user: req.userId,
-      amount,
-      description,
+      amount: parsedAmount,
+      description: description.trim(),
       category: category || 'Other',
       date: date || new Date(),
       receipt: receipt || null,
@@ -93,6 +110,76 @@ export const deleteExpense = async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Failed to delete expense',
+    });
+  }
+};
+
+// @desc    Update expense
+// @route   PUT /api/expenses/:id
+// @access  Private
+export const updateExpense = async (req, res) => {
+  try {
+    const { amount, description, category, date } = req.body;
+    
+    const expense = await Expense.findById(req.params.id);
+
+    if (!expense) {
+      return res.status(404).json({
+        success: false,
+        error: 'Expense not found',
+      });
+    }
+
+    // Make sure expense belongs to user
+    if (expense.user.toString() !== req.userId) {
+      return res.status(403).json({
+        success: false,
+        error: 'Not authorized to update this expense',
+      });
+    }
+
+    // Update fields if provided
+    if (amount !== undefined) {
+      const parsedAmount = parseFloat(amount);
+      if (isNaN(parsedAmount) || parsedAmount <= 0) {
+        return res.status(400).json({
+          success: false,
+          error: 'Amount must be a positive number',
+        });
+      }
+      expense.amount = parsedAmount;
+    }
+
+    if (description !== undefined) {
+      const trimmedDescription = description.trim();
+      if (!trimmedDescription) {
+        return res.status(400).json({
+          success: false,
+          error: 'Description cannot be empty',
+        });
+      }
+      expense.description = trimmedDescription;
+    }
+
+    if (category !== undefined) {
+      expense.category = category;
+    }
+
+    if (date !== undefined) {
+      expense.date = date;
+    }
+
+    await expense.save();
+
+    res.status(200).json({
+      success: true,
+      data: expense,
+    });
+  } catch (error) {
+    console.error('Update expense error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to update expense',
     });
   }
 };
