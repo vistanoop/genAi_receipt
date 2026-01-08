@@ -38,11 +38,34 @@ export default function SignupPage() {
 
     setLoading(true);
 
-    // Simulate signup (replace with actual authentication)
-    setTimeout(() => {
-      toast.success("Account created successfully!");
-      router.push("/dashboard");
-    }, 1500);
+    try {
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        toast.error(data.error || 'Signup failed');
+        setLoading(false);
+        return;
+      }
+
+      toast.success(data.message || 'Account created successfully!');
+      router.push('/dashboard');
+    } catch (error) {
+      console.error('Signup error:', error);
+      toast.error('An error occurred. Please try again.');
+      setLoading(false);
+    }
   };
 
   const passwordRequirements = [
