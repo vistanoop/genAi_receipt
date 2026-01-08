@@ -19,10 +19,10 @@
    - Name: SpendAhead Web Client
    - Authorized JavaScript origins:
      - `http://localhost:3000` (for development)
-     - `http://localhost:5000` (for backend)
+     - `http://localhost:5001` (for backend)
      - Your production URLs
    - Authorized redirect URIs:
-     - `http://localhost:5000/api/auth/google/callback` (for development)
+     - `http://localhost:5001/api/auth/google/callback` (for development)
      - Your production callback URL
 7. Copy the **Client ID** and **Client Secret**
 
@@ -34,7 +34,7 @@ Add these to your `backend/.env` file:
 # Google OAuth Configuration
 GOOGLE_CLIENT_ID=your-google-client-id-here
 GOOGLE_CLIENT_SECRET=your-google-client-secret-here
-BACKEND_URL=http://localhost:5000
+BACKEND_URL=http://localhost:5001
 FRONTEND_URL=http://localhost:3000
 ```
 
@@ -55,7 +55,7 @@ npm install axios
 
 ## Important Notes
 
-- **Development**: Use `http://localhost:3000` and `http://localhost:5000`
+- **Development**: Use `http://localhost:3000` and `http://localhost:5001`
 - **Production**: Update URLs in Google Console and .env file
 - **Security**: Never commit `.env` file with secrets
 - **HTTPS**: Production requires HTTPS for OAuth
@@ -63,7 +63,7 @@ npm install axios
 ## Troubleshooting
 
 **Error: "redirect_uri_mismatch"**
-- Check that redirect URI in Google Console matches exactly: `http://localhost:5000/api/auth/google/callback`
+- Check that redirect URI in Google Console matches exactly: `http://localhost:5001/api/auth/google/callback`
 
 **Error: "invalid_client"**
 - Verify GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in .env file

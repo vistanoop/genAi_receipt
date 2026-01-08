@@ -26,7 +26,7 @@ Create a `.env` file in the `backend` directory:
 
 ```env
 # Server Configuration
-PORT=5000
+PORT=5001
 NODE_ENV=development
 
 # MongoDB Configuration
@@ -54,7 +54,7 @@ npm run dev
 npm start
 ```
 
-The server will run on `http://localhost:5000`
+The server will run on `http://localhost:5001`
 
 ## API Endpoints
 

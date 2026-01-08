@@ -89,7 +89,7 @@ docker compose ps
 Once all services are running:
 
 - **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:5000/api
+- **Backend API**: http://localhost:5001/api
 - **MongoDB**: localhost:27017
 
 🎉 **That's it!** Your SpendAhead application is now running in Docker!
@@ -110,7 +110,7 @@ The Docker setup includes three main services:
 │  ┌──────────────┐   ┌──────────────┐      │
 │  │  Frontend    │   │   Backend    │      │
 │  │  Next.js     │──▶│   Express    │      │
-│  │  Port: 3000  │   │   Port: 5000 │      │
+│  │  Port: 3000  │   │   Port: 5001 │      │
 │  └──────────────┘   └──────┬───────┘      │
 │                             │               │
 │                      ┌──────▼───────┐      │
@@ -133,7 +133,7 @@ The Docker setup includes three main services:
 #### 2. Backend (Express API)
 
 - **Built from**: ./backend/Dockerfile
-- **Port**: 5000
+- **Port**: 5001
 - **Dependencies**: MongoDB
 - **Health Check**: Monitors API availability
 
@@ -376,7 +376,7 @@ docker system prune -a --volumes
 # Check what's using the port
 # On Linux/Mac:
 lsof -i :3000
-lsof -i :5000
+lsof -i :5001
 lsof -i :27017
 
 # On Windows:
@@ -539,7 +539,7 @@ docker compose ps
 # spendahead-mongodb        Up (healthy)
 
 # Manual health check
-curl http://localhost:5000/api/health
+curl http://localhost:5001/api/health
 ```
 
 ### Performance Issues
