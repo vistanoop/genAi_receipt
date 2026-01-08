@@ -67,7 +67,7 @@ docker compose up -d
 ## Access Application
 
 - Frontend: http://localhost:3000
-- Backend API: http://localhost:5000/api
+- Backend API: http://localhost:5001/api
 - MongoDB: localhost:27017
 
 ## Need More Help?

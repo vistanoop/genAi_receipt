@@ -4,7 +4,7 @@ Create a `.env` file in the `backend` directory with the following content:
 
 ```env
 # Server Configuration
-PORT=5000
+PORT=5001
 NODE_ENV=development
 
 # MongoDB Configuration
@@ -18,7 +18,7 @@ JWT_EXPIRE=7d
 
 # CORS Configuration
 FRONTEND_URL=http://localhost:3000
-BACKEND_URL=http://localhost:5000
+BACKEND_URL=http://localhost:5001
 
 # Google OAuth Configuration (Optional)
 # Get credentials from: https://console.cloud.google.com/

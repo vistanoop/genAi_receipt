@@ -92,7 +92,7 @@ docker compose up -d
 
 **Access Application**:
 - **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:5000/api
+- **Backend API**: http://localhost:5001/api
 
 📖 **For detailed Docker instructions, see [DOCKER_SETUP.md](DOCKER_SETUP.md)**
 
@@ -136,7 +136,7 @@ npm run dev
 
 #### Access Application
 - **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:5000/api
+- **Backend API**: http://localhost:5001/api
 
 ### First Steps After Installation
 1. Visit http://localhost:3000
@@ -238,7 +238,7 @@ docker compose up -d
 
 # 5. Access the application
 # Frontend: http://localhost:3000
-# Backend: http://localhost:5000/api
+# Backend: http://localhost:5001/api
 # MongoDB: localhost:27017
 ```
 
@@ -247,7 +247,7 @@ docker compose up -d
 The Docker setup includes three services:
 
 - **Frontend** (Next.js) - Port 3000
-- **Backend** (Express) - Port 5000  
+- **Backend** (Express) - Port 5001
 - **MongoDB** (Database) - Port 27017
 
 All services automatically connect and communicate with each other!
@@ -373,7 +373,7 @@ graph TB
     end
     
     subgraph "Backend - Express API"
-        G[Express Server :5000]
+        G[Express Server :5001]
         H[Auth Routes]
         I[Expense Routes]
         J[Goal Routes]
@@ -595,7 +595,7 @@ sequenceDiagram
 
 ### Base URLs
 - **Frontend**: `http://localhost:3000`
-- **Backend**: `http://localhost:5000/api`
+- **Backend**: `http://localhost:5001/api`
 
 ### Authentication Endpoints
 
@@ -854,7 +854,7 @@ Create `.env` in the backend directory:
 
 ```env
 # Server Configuration
-PORT=5000
+PORT=5001
 NODE_ENV=development
 
 # MongoDB Configuration
@@ -868,7 +868,7 @@ JWT_EXPIRE=7d
 
 # CORS Configuration
 FRONTEND_URL=http://localhost:3000
-BACKEND_URL=http://localhost:5000
+BACKEND_URL=http://localhost:5001
 
 # Google OAuth (Optional)
 GOOGLE_CLIENT_ID=your-google-client-id
@@ -1203,7 +1203,7 @@ const corsOptions = {
 **Solutions:**
 ```bash
 # Verify backend is running
-curl http://localhost:5000/api/health
+curl http://localhost:5001/api/health
 
 # Check port configuration
 cat backend/.env | grep PORT
@@ -1253,7 +1253,7 @@ cat .env.local | grep GEMINI_API_KEY
 # DevTools > Application > Cookies > verify 'token' exists
 
 # Verify API endpoints work
-curl http://localhost:5000/api/expenses -H "Cookie: token=YOUR_TOKEN"
+curl http://localhost:5001/api/expenses -H "Cookie: token=YOUR_TOKEN"
 
 # Check browser console for errors
 ```

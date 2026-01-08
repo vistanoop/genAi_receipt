@@ -9,7 +9,7 @@ export const googleAuth = async (req, res) => {
   try {
     const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
     const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
-    const REDIRECT_URI = `${process.env.BACKEND_URL || 'http://localhost:5000'}/api/auth/google/callback`;
+    const REDIRECT_URI = `${process.env.BACKEND_URL || 'http://localhost:5001'}/api/auth/google/callback`;
 
     if (!GOOGLE_CLIENT_ID) {
       return res.status(500).json({
@@ -38,7 +38,7 @@ export const googleCallback = async (req, res) => {
   try {
     const { code } = req.query;
     const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
-    const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:5000';
+    const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:5001';
     const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
     const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
     const REDIRECT_URI = `${BACKEND_URL}/api/auth/google/callback`;
