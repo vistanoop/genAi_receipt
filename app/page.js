@@ -1,131 +1,154 @@
-import React from "react";
+"use client";
+
+import React, { useState, useRef } from "react";
+import { Camera, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import Image from "next/image";
-import {
-  featuresData,
-  howItWorksData,
-  statsData,
-  testimonialsData,
-} from "@/data/landing";
-import HeroSection from "@/components/hero";
-import Link from "next/link";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { toast } from "sonner";
 
-const LandingPage = () => {
+export default function ReceiptReaderPage() {
+  const [loading, setLoading] = useState(false);
+  const [receiptData, setReceiptData] = useState(null);
+  const fileInputRef = useRef(null);
+
+  const handleReceiptScan = async (file) => {
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("File size should be less than 5MB");
+      return;
+    }
+
+    setLoading(true);
+    setReceiptData(null);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch("/api/scan-receipt", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to scan receipt");
+      }
+
+      const data = await response.json();
+      setReceiptData(data);
+      toast.success("Receipt scanned successfully!");
+    } catch (error) {
+      console.error("Error scanning receipt:", error);
+      toast.error(error.message || "Failed to scan receipt");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <HeroSection />
-
-      {/* Stats Section */}
-      <section className="py-20 bg-blue-50">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {statsData.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-4xl font-bold text-blue-600 mb-2">
-                  {stat.value}
-                </div>
-                <div className="text-gray-600">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section id="features" className="py-20">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">
-            Everything you need to manage your finances
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuresData.map((feature, index) => (
-              <Card className="p-6" key={index}>
-                <CardContent className="space-y-4 pt-4">
-                  {feature.icon}
-                  <h3 className="text-xl font-semibold">{feature.title}</h3>
-                  <p className="text-gray-600">{feature.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works Section */}
-      <section className="py-20 bg-blue-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-16">How It Works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {howItWorksData.map((step, index) => (
-              <div key={index} className="text-center">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  {step.icon}
-                </div>
-                <h3 className="text-xl font-semibold mb-4">{step.title}</h3>
-                <p className="text-gray-600">{step.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section id="testimonials" className="py-20">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-16">
-            What Our Users Say
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonialsData.map((testimonial, index) => (
-              <Card key={index} className="p-6">
-                <CardContent className="pt-4">
-                  <div className="flex items-center mb-4">
-                    <Image
-                      src={testimonial.image}
-                      alt={testimonial.name}
-                      width={40}
-                      height={40}
-                      className="rounded-full"
-                    />
-                    <div className="ml-4">
-                      <div className="font-semibold">{testimonial.name}</div>
-                      <div className="text-sm text-gray-600">
-                        {testimonial.role}
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-gray-600">{testimonial.quote}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-blue-600">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Ready to Take Control of Your Finances?
-          </h2>
-          <p className="text-blue-100 mb-8 max-w-2xl mx-auto">
-            Join thousands of users who are already managing their finances
-            smarter with Welth
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-12 px-4">
+      <div className="container mx-auto max-w-4xl">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            AI Receipt Reader
+          </h1>
+          <p className="text-lg text-gray-600">
+            Upload a receipt image and let AI extract the information for you
           </p>
-          <Link href="/dashboard">
-            <Button
-              size="lg"
-              className="bg-white text-blue-600 hover:bg-blue-50 animate-bounce"
-            >
-              Start Free Trial
-            </Button>
-          </Link>
         </div>
-      </section>
+
+        <Card className="shadow-xl">
+          <CardHeader>
+            <CardTitle>Upload Receipt</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="flex flex-col items-center gap-4">
+              <input
+                type="file"
+                ref={fileInputRef}
+                className="hidden"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleReceiptScan(file);
+                }}
+              />
+              <Button
+                type="button"
+                size="lg"
+                className="w-full h-16 bg-gradient-to-br from-orange-500 via-pink-500 to-purple-500 animate-gradient hover:opacity-90 transition-opacity text-white hover:text-white"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 animate-spin" />
+                    <span>Scanning Receipt...</span>
+                  </>
+                ) : (
+                  <>
+                    <Camera className="mr-2" />
+                    <span>Scan Receipt with AI</span>
+                  </>
+                )}
+              </Button>
+              <p className="text-sm text-gray-500">
+                Supports: JPG, PNG, HEIC (Max 5MB)
+              </p>
+            </div>
+
+            {receiptData && (
+              <div className="mt-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+                <h3 className="text-xl font-semibold mb-4 text-gray-900">
+                  Extracted Information
+                </h3>
+                <div className="space-y-3">
+                  <div className="flex justify-between border-b pb-2">
+                    <span className="font-medium text-gray-700">Amount:</span>
+                    <span className="text-gray-900 font-bold">
+                      ${receiptData.amount?.toFixed(2) || "N/A"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between border-b pb-2">
+                    <span className="font-medium text-gray-700">Date:</span>
+                    <span className="text-gray-900">
+                      {receiptData.date
+                        ? new Date(receiptData.date).toLocaleDateString()
+                        : "N/A"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between border-b pb-2">
+                    <span className="font-medium text-gray-700">Merchant:</span>
+                    <span className="text-gray-900">
+                      {receiptData.merchantName || "N/A"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between border-b pb-2">
+                    <span className="font-medium text-gray-700">Category:</span>
+                    <span className="text-gray-900 capitalize">
+                      {receiptData.category || "N/A"}
+                    </span>
+                  </div>
+                  <div className="pt-2">
+                    <span className="font-medium text-gray-700">Description:</span>
+                    <p className="text-gray-900 mt-1">
+                      {receiptData.description || "N/A"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <div className="mt-8 text-center text-sm text-gray-600">
+          <p>
+            Powered by Google Gemini AI | This application uses AI to extract
+            data from receipt images
+          </p>
+        </div>
+      </div>
     </div>
   );
-};
-
-export default LandingPage;
+}
