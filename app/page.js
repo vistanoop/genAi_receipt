@@ -12,6 +12,10 @@ import {
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
+/**
+ * Landing Page - Marketing + Onboarding Only
+ * NO analytics, NO charts, NO calculations, NO user data
+ */
 export default function HomePage() {
 
   return (
@@ -104,22 +108,22 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8 max-w-md mx-auto"
+              className="flex flex-col sm:flex-row gap-4 justify-center pt-8"
             >
-              <Link href="/signup" className="w-full sm:w-auto">
+              <Link href="/signup">
                 <Button
                   size="lg"
-                  className="w-full h-14 text-lg bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300 button-glow group"
+                  className="w-full sm:w-auto h-14 text-lg bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300 button-glow group"
                 >
-                  Get Started
+                  Get Started Free
                   <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <Link href="/login" className="w-full sm:w-auto">
+              <Link href="/login">
                 <Button
                   size="lg"
                   variant="outline"
-                  className="w-full h-14 text-lg border-2 hover:bg-background/80 transition-all duration-300"
+                  className="w-full sm:w-auto h-14 text-lg border-2 hover:bg-muted"
                 >
                   Sign In
                 </Button>
@@ -150,8 +154,170 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Problem Statement Section */}
+      <section className="py-24 bg-muted/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl sm:text-5xl font-bold mb-4">
+              Why <span className="gradient-title">Month-End Struggle</span> Happens
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              You make spending decisions based only on current balance, not understanding how today&apos;s choices affect tomorrow.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            {[
+              {
+                problem: "Blind Spot",
+                description: "You don't see how today's ₹5,000 spending affects your end-of-month balance.",
+                icon: Shield,
+              },
+              {
+                problem: "Goal Disconnect",
+                description: "You don't know if a purchase will delay your savings goals by days or months.",
+                icon: Target,
+              },
+              {
+                problem: "No Visibility",
+                description: "You can't test 'what if I buy this?' before making the decision.",
+                icon: LineChart,
+              },
+            ].map((item, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.2 }}
+                className="glassmorphism rounded-2xl p-8 card-hover"
+              >
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center mb-6">
+                  <item.icon className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold mb-4 text-red-600 dark:text-red-400">{item.problem}</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  {item.description}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Features Section */}
-      <section className="py-20 bg-muted/30">
+      <section className="py-24 bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl sm:text-5xl font-bold mb-4">
+              <span className="gradient-title">FlowCast</span> Features
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Everything you need to understand your financial future
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Cash-Flow Forecast",
+                description: "See your predicted end-of-month balance and next 3 months projection.",
+                icon: LineChart,
+                gradient: "from-teal-500 to-blue-500",
+              },
+              {
+                title: "Simulation Lab",
+                description: "Test 'what if I buy this?' scenarios before making decisions.",
+                icon: Sparkles,
+                gradient: "from-blue-500 to-purple-500",
+              },
+              {
+                title: "AI Financial Copilot",
+                description: "Ask questions like 'Can I afford this?' and get AI-powered explanations.",
+                icon: Brain,
+                gradient: "from-purple-500 to-pink-500",
+              },
+              {
+                title: "Smart Dashboard",
+                description: "Track your current balance, expenses, and savings progress.",
+                icon: TrendingUp,
+                gradient: "from-emerald-500 to-teal-500",
+              },
+              {
+                title: "Savings Goals",
+                description: "Set goals and see how spending decisions delay or accelerate them.",
+                icon: Target,
+                gradient: "from-orange-500 to-red-500",
+              },
+              {
+                title: "User-Defined Rules",
+                description: "Set your own safety buffers, thresholds, and risk tolerance.",
+                icon: Shield,
+                gradient: "from-indigo-500 to-blue-500",
+              },
+            ].map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="glassmorphism rounded-2xl p-8 card-hover"
+              >
+                <div
+                  className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}
+                >
+                  <feature.icon className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold mb-4">{feature.title}</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  {feature.description}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-24 bg-gradient-to-br from-teal-500/10 via-blue-500/10 to-purple-600/10">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-4xl sm:text-5xl font-bold mb-6">
+              Ready to see your financial <span className="gradient-title">future</span>?
+            </h2>
+            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Join FlowCast today and start making better financial decisions with AI-powered insights.
+            </p>
+            <Link href="/signup">
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-teal-600 to-purple-600 hover:from-teal-700 hover:to-purple-700 text-white shadow-xl hover:shadow-2xl text-lg px-8 py-6 button-glow"
+              >
+                Get Started Free
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section id="how-it-works" className="py-24 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -215,6 +381,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
 
       {/* Footer */}
       <footer className="py-12 border-t border-border bg-background">
