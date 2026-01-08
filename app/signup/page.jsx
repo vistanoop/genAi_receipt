@@ -60,7 +60,8 @@ export default function SignupPage() {
       }
 
       toast.success(data.message || 'Account created successfully!');
-      router.push('/dashboard');
+      // Redirect to onboarding instead of dashboard
+      router.push('/onboarding');
     } catch (error) {
       console.error('Signup error:', error);
       toast.error('An error occurred. Please try again.');

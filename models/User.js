@@ -25,6 +25,35 @@ const UserSchema = new mongoose.Schema(
       minlength: 8,
       select: false, // Don't return password by default
     },
+    // Financial Profile
+    monthlyIncome: {
+      type: Number,
+      default: 0,
+    },
+    currency: {
+      type: String,
+      default: 'INR',
+      enum: ['INR', 'USD', 'EUR', 'GBP', 'JPY', 'AUD', 'CAD'],
+    },
+    // User-defined safety rules (NO hardcoded values)
+    minimumBalanceThreshold: {
+      type: Number,
+      default: 5000, // User can change this
+    },
+    monthlySavingsFloor: {
+      type: Number,
+      default: 5000, // User can change this
+    },
+    riskTolerance: {
+      type: String,
+      enum: ['low', 'medium', 'high'],
+      default: 'medium',
+    },
+    // Onboarding completion flag
+    onboardingCompleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
