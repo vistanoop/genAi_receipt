@@ -4,31 +4,25 @@
 
 FlowCast is an intelligent expense management platform that helps you track your spending, categorize expenses, and gain insights into your financial habits with AI-powered receipt scanning.
 
-## 🚀 Quick Start
+## 🚀 Complete Setup Guide
 
-**[📖 Read the Complete Setup Guide](./SETUP_GUIDE.md)**
+### Prerequisites
 
-### Frontend Quick Installation
+Before starting, ensure you have:
+- **Node.js** (v18 or higher) - [Download here](https://nodejs.org/)
+- **MongoDB** (v6 or higher) - [Download here](https://www.mongodb.com/try/download/community)
+- **Git** - [Download here](https://git-scm.com/downloads)
+
+### Step 1: Clone the Repository
 
 ```bash
-# Clone the repository
 git clone https://github.com/vistanoop/genAi_receipt.git
 cd genAi_receipt
-
-# Install dependencies
-npm install
-
-# Setup environment variables
-cp .env.local.example .env.local
-# Edit .env.local with your MongoDB URI and JWT secret
-
-# Run the development server
-npm run dev
 ```
 
-Visit [http://localhost:3000](http://localhost:3000) to get started!
+### Step 2: Backend Setup
 
-### Backend Quick Installation (Standalone Server)
+The backend is a standalone Node.js/Express server that handles all API requests and database operations.
 
 ```bash
 # Navigate to backend directory
@@ -37,18 +31,132 @@ cd backend
 # Install dependencies
 npm install
 
-# Setup environment variables
+# Create environment file
 cp .env.example .env
+```
 
-# Edit .env with your MongoDB URI and JWT secret
+#### Configure Backend Environment Variables
 
-# Run the backend server
+Edit `backend/.env` with your configuration:
+
+```env
+# MongoDB Connection
+# Local MongoDB (make sure MongoDB is running on your machine)
+MONGODB_URI=mongodb://localhost:27017/genai-receipt
+
+# JWT Secret (IMPORTANT: Change this to a strong random string)
+# Generate a secure secret: openssl rand -base64 32
+JWT_SECRET=your-very-strong-secret-key-change-this-in-production
+
+# Server Configuration
+PORT=5001
+NODE_ENV=development
+
+# Frontend URL (for CORS)
+FRONTEND_URL=http://localhost:3000
+```
+
+**Important Notes:**
+- Make sure MongoDB is installed and running before starting the backend
+- To start MongoDB locally: `mongod` or `brew services start mongodb-community` (macOS)
+- Change `JWT_SECRET` to a strong random string for security
+- Default port is 5001, change if needed
+
+#### Start the Backend Server
+
+```bash
+# From the backend directory
 npm run dev
 ```
 
-Backend API will be available at [http://localhost:5001](http://localhost:5001)
+You should see:
+```
+Server running on port 5001
+Environment: development
+MongoDB Connected: localhost
+```
 
-**[📖 Read Backend Documentation](./backend/README.md)** for detailed API reference.
+### Step 3: Frontend Setup
+
+```bash
+# Go back to the root directory
+cd ..
+
+# Install frontend dependencies
+npm install
+
+# Create environment file
+cp .env.local.example .env.local
+```
+
+#### Configure Frontend Environment Variables
+
+Edit `.env.local` in the root directory:
+
+```env
+# MongoDB Connection (for Next.js API routes, if used)
+MONGODB_URI=mongodb://localhost:27017/genai-receipt
+
+# JWT Secret (must match backend JWT_SECRET)
+JWT_SECRET=your-very-strong-secret-key-change-this-in-production
+
+# Optional: Google Gemini AI API Key for receipt scanning
+# Get your API key from: https://makersuite.google.com/app/apikey
+GEMINI_API_KEY=your-gemini-api-key-here
+```
+
+**Important Notes:**
+- The `JWT_SECRET` must match the one in `backend/.env`
+- `GEMINI_API_KEY` is optional - the app works without AI features
+- MongoDB URI should point to the same database as backend
+
+#### Start the Frontend Server
+
+```bash
+# From the root directory
+npm run dev
+```
+
+Visit [http://localhost:3000](http://localhost:3000) to use the app!
+
+### Step 4: Verify Setup
+
+1. **Backend is running**: [http://localhost:5001](http://localhost:5001) should show API information
+2. **Frontend is running**: [http://localhost:3000](http://localhost:3000) should show the login page
+3. **MongoDB is connected**: Backend console should show "MongoDB Connected"
+
+### Troubleshooting
+
+#### MongoDB Connection Issues
+```bash
+# Check if MongoDB is running
+mongosh  # or mongo (depending on version)
+
+# If not running, start MongoDB:
+# macOS (with Homebrew)
+brew services start mongodb-community
+
+# Linux
+sudo systemctl start mongod
+
+# Windows
+net start MongoDB
+```
+
+#### Port Already in Use
+If port 5001 or 3000 is already in use, change it in the respective `.env` files.
+
+#### Module Not Found Errors
+```bash
+# Clean install dependencies
+rm -rf node_modules package-lock.json
+npm install
+
+# For backend
+cd backend
+rm -rf node_modules package-lock.json
+npm install
+```
 
 ## ✨ Key Features
 
@@ -106,14 +214,16 @@ Backend API will be available at [http://localhost:5001](http://localhost:5001)
 - **AI**: Google Gemini AI (optional)
 - **UI Components**: Radix UI, Framer Motion
 
-## 📖 Documentation
+## 📖 Additional Documentation
 
-- **[Setup Guide](./SETUP_GUIDE.md)** - Complete installation instructions
-- **[Backend Documentation](./backend/README.md)** - Standalone backend setup and API reference
-- **[Backend Implementation Summary](./BACKEND_IMPLEMENTATION.md)** - Complete backend architecture overview
-
-- **[Setup Guide](./SETUP_GUIDE.md)** - Complete installation instructions
-- **[API Documentation](./API_DOCS.md)** - Backend API reference (coming soon)
+For more detailed information:
+- **API Endpoints**: Backend exposes RESTful APIs at `http://localhost:5001/api/`
+  - `/api/auth` - Authentication (signup, login, logout)
+  - `/api/user` - User profile management
+  - `/api/expenses` - Expense tracking
+  - `/api/income` - Income management
+  - `/api/fixed-expenses` - Fixed/recurring expenses
+  - `/api/goals` - Financial goals
 
 ## 🔒 Security Features
 
@@ -137,20 +247,30 @@ Backend API will be available at [http://localhost:5001](http://localhost:5001)
 - [ ] Mobile app
 - [ ] Multi-currency support
 
-## 📝 Environment Variables
+## 📝 Environment Variables Reference
 
-Required variables in `.env.local`:
+### Backend Environment Variables (`backend/.env`)
 
-```env
-# MongoDB connection string
-MONGODB_URI=mongodb://localhost:27017/genai-receipt
+| Variable | Required | Description | Example |
+|----------|----------|-------------|---------|
+| `MONGODB_URI` | Yes | MongoDB connection string | `mongodb://localhost:27017/genai-receipt` |
+| `JWT_SECRET` | Yes | Secret key for JWT tokens (use a strong random string) | Generate with: `openssl rand -base64 32` |
+| `PORT` | No | Backend server port (default: 5001) | `5001` |
+| `NODE_ENV` | No | Environment mode | `development` or `production` |
+| `FRONTEND_URL` | Yes | Frontend URL for CORS | `http://localhost:3000` |
 
-# JWT secret for authentication
-JWT_SECRET=your-secret-key-here
+### Frontend Environment Variables (`.env.local`)
 
-# Optional: Gemini AI for receipt scanning
-GEMINI_API_KEY=your-gemini-api-key
-```
+| Variable | Required | Description | Example |
+|----------|----------|-------------|---------|
+| `MONGODB_URI` | Yes | MongoDB connection string (same as backend) | `mongodb://localhost:27017/genai-receipt` |
+| `JWT_SECRET` | Yes | JWT secret (must match backend) | Same as backend JWT_SECRET |
+| `GEMINI_API_KEY` | No | Google Gemini AI API key for receipt scanning | Get from https://makersuite.google.com/app/apikey |
+| `PORT` | No | Frontend server port (default: 3000) | `3000` |
+| `NODE_ENV` | No | Environment mode | `development` or `production` |
+| `FRONTEND_URL` | No | Frontend URL | `http://localhost:3000` |
+
+**⚠️ Security Warning**: Never commit `.env` or `.env.local` files to git. They contain sensitive information.
 
 ## 🤝 Contributing
 
