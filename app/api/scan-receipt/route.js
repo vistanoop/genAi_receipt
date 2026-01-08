@@ -70,10 +70,19 @@ export async function POST(request) {
     try {
       const data = JSON.parse(cleanedText);
       
+      // Validate extracted amount
+      const amount = parseFloat(data.amount);
+      if (isNaN(amount) || amount <= 0) {
+        return NextResponse.json(
+          { error: "Invalid amount extracted from receipt" },
+          { status: 400 }
+        );
+      }
+      
       // Create expense in database
       const expense = await Expense.create({
         userId: auth.userId,
-        amount: parseFloat(data.amount) || 0,
+        amount: amount,
         category: data.category || "other-expense",
         description: data.description || data.merchantName || "Receipt expense",
         date: data.date ? new Date(data.date) : new Date(),

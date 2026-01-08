@@ -34,6 +34,18 @@ export async function POST(request) {
       );
     }
 
+    // Check for password complexity
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    
+    if (!hasUpperCase || !hasLowerCase || !hasNumber) {
+      return NextResponse.json(
+        { error: 'Password must contain at least one uppercase letter, one lowercase letter, and one number' },
+        { status: 400 }
+      );
+    }
+
     // Create new user
     const user = await User.create({
       name,
