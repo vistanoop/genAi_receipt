@@ -39,7 +39,9 @@ docker-compose*.yml
 .dockerignore
 
 # Misc
-*.md
+README.md
+DOCKER_SETUP.md
+DOCKER_QUICK_REF.md
 LICENSE
 .editorconfig
 .eslintrc.json

@@ -34,9 +34,7 @@ docker-compose*.yml
 .dockerignore
 
 # Misc
+README.md
 *.md
 LICENSE
 .editorconfig
-
-# Scripts (if not needed in production)
-scripts
