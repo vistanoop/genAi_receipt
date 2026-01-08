@@ -7,8 +7,9 @@ A simple and powerful AI-powered receipt scanner that extracts information from 
 - 📸 Upload receipt images (JPG, PNG, HEIC)
 - 🤖 AI-powered data extraction using Google Gemini
 - 💰 Automatically extracts: Amount, Date, Merchant, Category, Description
-- 🎨 Clean and modern UI
+- 🎨 Simple and clean basic web UI
 - ⚡ Fast and easy to use
+- 🚀 No external UI libraries required - pure React with inline styles
 
 ## Prerequisites 📋
 
@@ -87,10 +88,10 @@ The application will be available at: **http://localhost:3000**
 
 ## How It Works 🔧
 
-1. **Frontend**: Built with Next.js 15 and React
+1. **Frontend**: Built with Next.js 15 and React with inline styles
 2. **AI Processing**: Uses Google's Gemini 1.5 Flash model for image analysis
-3. **Styling**: Tailwind CSS for a modern, responsive design
-4. **UI Components**: Custom components built with Radix UI primitives
+3. **Styling**: Simple inline CSS for a clean, responsive design
+4. **UI Components**: Basic HTML elements with React state management
 
 ## Project Structure 📁
 
@@ -141,9 +142,7 @@ npm start
 - **Next.js 15** - React framework
 - **React 19** - UI library
 - **Google Gemini AI** - AI/ML processing
-- **Tailwind CSS** - Styling
-- **Radix UI** - Accessible UI primitives
-- **Lucide React** - Icons
+- **Inline CSS** - Simple styling
 
 ## Contributing 🤝
 
