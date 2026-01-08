@@ -8,7 +8,7 @@ FlowCast is an intelligent expense management platform that helps you track your
 
 **[📖 Read the Complete Setup Guide](./SETUP_GUIDE.md)**
 
-### Quick Installation
+### Frontend Quick Installation
 
 ```bash
 # Clone the repository
@@ -27,6 +27,27 @@ npm run dev
 ```
 
 Visit [http://localhost:3000](http://localhost:3000) to get started!
+
+### Backend Quick Installation (Standalone Server)
+
+```bash
+# Navigate to backend directory
+cd backend
+
+# Install dependencies
+npm install
+
+# Setup environment variables
+cp .env.example .env
+# Edit .env with your MongoDB URI and JWT secret
+
+# Run the backend server
+npm run dev
+```
+
+Backend API will be available at [http://localhost:5000](http://localhost:5000)
+
+**[📖 Read Backend Documentation](./backend/README.md)** for detailed API reference.
 
 ## ✨ Key Features
 
@@ -75,14 +96,20 @@ Visit [http://localhost:3000](http://localhost:3000) to get started!
 ## 🛠️ Tech Stack
 
 - **Frontend**: Next.js 15, React 19, Tailwind CSS
-- **Backend**: Next.js API Routes, Node.js
-- **Database**: MongoDB with Mongoose ODM
+- **Backend**: 
+  - Next.js API Routes (hybrid approach)
+  - **Standalone Node.js/Express Backend** (separate server in `/backend` directory)
+- **Database**: MongoDB with Mongoose ODM (local storage)
 - **Authentication**: JWT tokens, bcryptjs
 - **Charts**: Recharts
 - **AI**: Google Gemini AI (optional)
 - **UI Components**: Radix UI, Framer Motion
 
 ## 📖 Documentation
+
+- **[Setup Guide](./SETUP_GUIDE.md)** - Complete installation instructions
+- **[Backend Documentation](./backend/README.md)** - Standalone backend setup and API reference
+- **[Backend Implementation Summary](./BACKEND_IMPLEMENTATION.md)** - Complete backend architecture overview
 
 - **[Setup Guide](./SETUP_GUIDE.md)** - Complete installation instructions
 - **[API Documentation](./API_DOCS.md)** - Backend API reference (coming soon)
