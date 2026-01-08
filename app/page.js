@@ -10,7 +10,10 @@ import {
   Zap,
   Target,
   LineChart,
-  Brain
+  Brain,
+  Receipt,
+  DollarSign,
+  PieChart
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
