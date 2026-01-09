@@ -1,72 +1,85 @@
 services:
-  # MongoDB Database
-  mongodb:
-    image: mongo:6.0
-    container_name: momwatch_mongodb
-    restart: unless-stopped
-    ports:
-      - "27017:27017"
-    volumes:
-      - ./data/mongodb:/data/db
-    healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 40s
-    networks:
-      - momwatch_network
-
-  # Backend API
-  backend:
-    build: ./backend
-    container_name: momwatch_backend
-    restart: unless-stopped
-    ports:
-      - "8000:8000"
-    env_file:
-      - .env
-    volumes:
-      - ./ml_ops/model_store:/app/models
-      - ./logs:/app/logs
-    depends_on:
-      mongodb:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
-    networks:
-      - momwatch_network
-
-  # Frontend (Streamlit)
-  frontend:
-    build: ./frontend
-    container_name: momwatch_frontend
-    restart: unless-stopped
-    ports:
-      - "8501:8501"
+  # -----------------------------
+  # The Local Bank Database
+  # -----------------------------
+  bank-db:
+    image: postgres:15
+    container_name: bank-db
     environment:
-      - BACKEND_API_URL=http://backend:8000
-    depends_on:
-      backend:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "--fail", "http://localhost:8501/_stcore/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
+      POSTGRES_USER: bank_user
+      POSTGRES_PASSWORD: bank_password
+      POSTGRES_DB: bank_db
     networks:
-      - momwatch_network
+      - bank-internal
+    volumes:
+      - ./bank-api/init/setup.sql:/docker-entrypoint-initdb.d/setup.sql
 
+  # -----------------------------
+  # The Simulated Bank
+  # -----------------------------
+  bank-api:
+    build: ./bank-api
+    container_name: bank-service
+    environment:
+      - DB_HOST=bank-db
+      - DB_USER=bank_user
+      - DB_PASSWORD=bank_password
+      - DB_NAME=bank_db
+    ports:
+      - "3100:3100"
+    depends_on:
+      - bank-db
+    networks:
+      - vaultguard-net
+      - bank-internal
+
+  # -----------------------------
+  # VaultGuard Backend (FastAPI)
+  # -----------------------------
+  vaultguard-backend:
+    build: ./vaultguard-backend
+    container_name: vaultguard-backend
+    environment:
+      - BANK_API_URL=http://bank-api:3100
+      - DEFAULT_ACCOUNT_NUMBER=1234567890
+      - DEFAULT_IFSC_CODE=VAULT001
+      - USER_NAME=Rahul Sharma
+      - USER_EMAIL=rahul.sharma@email.com
+      - BANK_NAME=VaultGuard Bank
+    ports:
+      - "8080:8080"
+    depends_on:
+      - bank-api
+    networks:
+      - vaultguard-net
+    volumes:
+      - ./vaultguard-backend:/app
+
+  # -----------------------------
+  # VaultGuard Frontend
+  # -----------------------------
+  vaultguard-frontend:
+    build: ./vaultguard-frontend
+    container_name: vaultguard-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8080
+      - CHOKIDAR_USEPOLLING=true # Essential for hot reload on some systems
+    volumes:
+      - ./vaultguard-frontend:/app
+      - /app/node_modules # Important: prevents local modules from clashing
+    depends_on:
+      - vaultguard-backend
+    networks:
+      - vaultguard-net
+
+# -----------------------------
+# Networks
+# -----------------------------
 networks:
-  momwatch_network:
+  vaultguard-net:
     driver: bridge
-
-volumes:
-  mongodb_data:
-  model_store:
-  logs:
+  bank-internal:
+    driver: bridge
+    internal: true
