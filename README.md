@@ -116,3 +116,26 @@ echo "SECRET_KEY=$(python -c 'import secrets; print(secrets.token_urlsafe(64))')
 
 ## Video Demonstration
 - https://vimeo.com/1152688816?fl=ip&fe=ec
+
+## Security and Issues Documentation
+
+**Important**: This repository has undergone a security and functionality review. All identified issues are documented for transparency and accountability.
+
+### Documentation Files:
+- **[SECURITY_ISSUES.md](./SECURITY_ISSUES.md)**: Comprehensive documentation of 20 identified security and functionality issues
+  - Each issue includes: Description, Steps to Reproduce, Observed Impact, and Supporting Evidence
+  - Issues are categorized by severity: Critical, High, Medium, and Technical Debt
+  
+- **[HOW_TO_CREATE_GITHUB_ISSUES.md](./HOW_TO_CREATE_GITHUB_ISSUES.md)**: Step-by-step guide for creating GitHub Issues from the documented problems
+  - Includes issue format templates
+  - Label recommendations
+  - Quick reference for all 20 issues
+
+### Issue Categories:
+- **5 Critical Security Issues**: Hardcoded secrets, CORS misconfig, XSS vulnerability, no HTTPS, SQL injection
+- **5 High Priority Security Issues**: No rate limiting, weak passwords, predictable account numbers, information disclosure
+- **5 Medium Priority Issues**: Data persistence, access control, resource limits, token handling
+- **4 Data Validation Issues**: Input validation gaps
+- **1 Technical Debt Issue**: Deprecated API usage
+
+**Note**: These issues are documented only, not corrected. They serve as a reference for understanding the current state of the application.
