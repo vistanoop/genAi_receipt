@@ -1,3 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.env
+
+# Backend
+backend/venv/
+backend/db/
+backend/data/*.db
+
+# OS
+.DS_Store
+
+# Local / submission
+submission/
 # Dependencies
 node_modules/
 */node_modules/
