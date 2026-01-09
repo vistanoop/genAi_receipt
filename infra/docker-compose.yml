@@ -1,0 +1,23 @@
+services:
+  backend:
+    build: ../backend
+    container_name: fundingsense-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../backend/db:/app/db
+      - ../backend/data:/app/data
+    env_file:
+      - ../backend/.env
+    tty: true
+
+  frontend:
+    build: 
+      context: ../frontend
+      args:
+        - VITE_API_URL=http://localhost:8000/api/v1
+    container_name: fundingsense-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend

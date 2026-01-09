@@ -1,0 +1,144 @@
+import os
+import chromadb
+from chromadb.utils import embedding_functions
+from typing import List, Optional
+from app.schemas.evidence import EvidenceUnit, SourceType
+from app.config.settings import settings
+
+
+class EvidenceStore:
+    def __init__(self, persist_directory: str = "db"):
+        try:
+            # Use absolute path for ChromaDB to prevent Rust slice errors in some environments
+            abs_persist_path = os.path.abspath(persist_directory)
+            self.client = chromadb.PersistentClient(path=abs_persist_path)
+
+            if settings.GOOGLE_API_KEY:
+                self.emb_fn = embedding_functions.GoogleGenerativeAiEmbeddingFunction(
+                    api_key=settings.GOOGLE_API_KEY, model_name="models/text-embedding-004"
+                )
+            else:
+                self.emb_fn = embedding_functions.DefaultEmbeddingFunction()
+
+            self.collection = self.client.get_or_create_collection(
+                name="funding_evidence", embedding_function=self.emb_fn
+            )
+        except Exception as e:
+            print(f"[!] ChromaDB initialization failed: {e}")
+            raise e
+
+    def save_evidence(self, evidence: EvidenceUnit):
+
+        # this saves a single EvidenceUnit to the ChromaDB vector store.
+
+        metadata = {
+            "source_type": str(evidence.source_type.value),
+            "source_name": evidence.source_name,
+            "published_year": evidence.published_year,
+            "url": evidence.url or "",
+            "sector": evidence.sector,
+            "geography": evidence.geography,
+            "title": evidence.title,
+            "category": evidence.category or "market",
+            "duration": evidence.duration or ""
+        }
+
+        # adding the invesitoes as comma seperated
+        if evidence.investors:
+            metadata["investors"] = ",".join(evidence.investors)
+
+        self.collection.upsert(
+            ids=[evidence.evidence_id],
+            documents=[evidence.content],
+            metadatas=[metadata],
+        )
+
+    def query_evidence(self, query_text: str, n_results: int = 5) -> List[EvidenceUnit]:
+        
+        #search for evidence using semantic similarity.
+
+        results = self.collection.query(query_texts=[query_text], n_results=n_results)
+
+        evidence_units = []
+        if not results["ids"] or not results["ids"][0]:
+            return []
+
+        for i in range(len(results["ids"][0])):
+            meta = results["metadatas"][0][i]
+            
+            # Robust mapping for source_type enum
+            raw_type = meta.get("source_type", "news").lower()
+            if raw_type not in [s.value for s in SourceType]:
+                raw_type = "news"
+
+            evidence_units.append(
+                EvidenceUnit(
+                    evidence_id=results["ids"][0][i],
+                    source_type=SourceType(raw_type),
+                    title=meta.get("title", "Untitled"),
+                    source_name=meta.get("source_name", "Unknown"),
+                    published_year=int(meta.get("published_year") or 2024),
+                    url=meta.get("url"),
+                    sector=meta.get("sector", "General"),
+                    geography=meta.get("geography", "Global"),
+                    investors=(
+                        meta.get("investors", "").split(",")
+                        if meta.get("investors")
+                        else []
+                    ),
+                    content=results["documents"][0][i],
+                    usage_tags=[meta.get("source_type", "evidence-store")],
+                    category=meta.get("category", "market"),
+                    duration=meta.get("duration")
+                )
+            )
+
+        return evidence_units
+
+    def list_all_evidence(self, limit: int = 100) -> List[EvidenceUnit]:
+        """
+        Retrieves a broad sample of ingested evidence from the vector store.
+        """
+        try:
+            results = self.collection.get(limit=limit)
+        except Exception as e:
+            print(f"[!] ChromaDB get error: {e}")
+            return []
+
+        evidence_units = []
+        if not results or not results["ids"]:
+            return []
+
+        for i in range(len(results["ids"])):
+            meta = results["metadatas"][i] or {}
+            
+            # Robust mapping for source_type enum
+            raw_type = str(meta.get("source_type", "news")).lower()
+            if raw_type not in [s.value for s in SourceType]:
+                raw_type = "news"
+
+            try:
+                evidence_units.append(
+                    EvidenceUnit(
+                        evidence_id=results["ids"][i],
+                        source_type=SourceType(raw_type),
+                        title=meta.get("title", "Untitled"),
+                        source_name=meta.get("source_name", "Ingested Intelligence"),
+                        published_year=int(meta.get("published_year") or 2024),
+                        url=meta.get("url"),
+                        sector=meta.get("sector", "General"),
+                        geography=meta.get("geography", "Global"),
+                        investors=(
+                            meta.get("investors", "").split(",")
+                            if meta.get("investors")
+                            else []
+                        ),
+                        content=results["documents"][i],
+                        usage_tags=["ingested"]
+                    )
+                )
+            except Exception as e:
+                print(f"    [!] Mapping error for evidence unit {results['ids'][i]}: {e}")
+                continue
+
+        return evidence_units
